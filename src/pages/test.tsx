@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { getPrizes } from '../fetch/getPrizes';
 import { getEthPrice } from '../fetch/getEthPrice';
 import { getContractSymbols } from '../fetch/getContractSymbols';
+import { getTvl } from '../fetch/getTvl';
 
 const PrizePoolPage = () => {
   const [data, setData] = useState<{ accountedBalance: string | null, grandPrizeLiquidity: string | null }>({
@@ -12,21 +13,24 @@ const PrizePoolPage = () => {
   });
   const [ethPrice, setEthPrice] = useState<number | null>(null);
   const [contractSymbols, setContractSymbols] = useState<{ vaultName: string | null }>({ vaultName: null });
+  const [tvl, setTvl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [prizePoolData, ethPrice, contractSymbols] = await Promise.all([
-          getPrizes(), 
-          getEthPrice(), 
-          getContractSymbols()
+        const [prizePoolData, ethPrice, contractSymbols, tvl] = await Promise.all([
+          getPrizes(),
+          getEthPrice(),
+          getContractSymbols(),
+          getTvl(),
         ]);
         setData(prizePoolData);
         setEthPrice(ethPrice);
         setContractSymbols(contractSymbols);
-      } catch (err) {
+        setTvl(tvl);
+      } catch (err: any) {
         setError(`Failed to fetch data: ${err.message}`);
       } finally {
         setLoading(false);
@@ -58,6 +62,7 @@ const PrizePoolPage = () => {
       <p>Tier 0 Remaining Liquidity: {formatToEth(data.grandPrizeLiquidity)} ETH</p>
       <p>Tier 0 Remaining Liquidity: ${calculateUsdValue(data.grandPrizeLiquidity)}</p>
       <p>Contract Vault Name: {contractSymbols.vaultName || 'N/A'}</p>
+      <p>Total Value Locked (TVL): {tvl || 'N/A'}</p>
     </div>
   );
 };
