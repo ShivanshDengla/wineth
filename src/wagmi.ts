@@ -1,23 +1,19 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import {
-  arbitrum,
-  base,
-  mainnet,
-  optimism,
-  polygon,
-  sepolia,
-} from 'wagmi/chains';
+import { optimism } from 'wagmi/chains';
+import { createPublicClient, http } from 'viem';
+
+export const PROVIDER_OP = createPublicClient({
+  chain: optimism,
+  transport: http(`https://opt-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`),
+});
+
+const WALLET_CONNECT_KEY = process.env.WALLET_CONNECT || "default_project_id";
 
 export const config = getDefaultConfig({
-  appName: 'RainbowKit App',
-  projectId: 'YOUR_PROJECT_ID',
+  appName: 'WinWin',
+  projectId: WALLET_CONNECT_KEY,
   chains: [
-    mainnet,
-    polygon,
     optimism,
-    arbitrum,
-    base,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [sepolia] : []),
   ],
   ssr: true,
-});
+})
