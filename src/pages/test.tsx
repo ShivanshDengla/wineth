@@ -1,9 +1,8 @@
-// pages/prizepool.tsx
+// pages/test.tsx
 
 import { useEffect, useState } from 'react';
 import { getPrizes } from '../fetch/getPrizes';
 import { getEthPrice } from '../fetch/getEthPrice';
-import { getContractSymbols } from '../fetch/getContractSymbols';
 
 const PrizePoolPage = () => {
   const [data, setData] = useState<{ accountedBalance: string | null, grandPrizeLiquidity: string | null }>({
@@ -11,24 +10,15 @@ const PrizePoolPage = () => {
     grandPrizeLiquidity: null,
   });
   const [ethPrice, setEthPrice] = useState<number | null>(null);
-  const [symbols, setSymbols] = useState<{ vaultSymbol: string | null, usdcSymbol: string | null }>({
-    vaultSymbol: null,
-    usdcSymbol: null,
-  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [prizePoolData, ethPrice, contractSymbols] = await Promise.all([
-          getPrizes(),
-          getEthPrice(),
-          getContractSymbols(),
-        ]);
+        const [prizePoolData, ethPrice] = await Promise.all([getPrizes(), getEthPrice()]);
         setData(prizePoolData);
         setEthPrice(ethPrice);
-        setSymbols(contractSymbols);
       } catch (err) {
         setError(`Failed to fetch data: ${err.message}`);
       } finally {
@@ -60,10 +50,6 @@ const PrizePoolPage = () => {
       <p>Accounted Balance: ${calculateUsdValue(data.accountedBalance)}</p>
       <p>Tier 0 Remaining Liquidity: {formatToEth(data.grandPrizeLiquidity)} ETH</p>
       <p>Tier 0 Remaining Liquidity: ${calculateUsdValue(data.grandPrizeLiquidity)}</p>
-      
-      <h2>Contract Symbols</h2>
-      <p>Vault Symbol: {symbols.vaultSymbol || 'N/A'}</p>
-      <p>USDC Symbol: {symbols.usdcSymbol || 'N/A'}</p>
     </div>
   );
 };
