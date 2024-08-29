@@ -20,9 +20,9 @@ export const CONTRACTS = {
     abi: ABI.USDCVAULT,
     client: PROVIDER_OP,
   }),
-  DEPOSITTOKEN: getContract({
-    address: ADDRESS.DEPOSITTOKEN,
-    abi: ABI.DEPOSITTOKEN,
+  USDC: getContract({
+    address: ADDRESS.USDC,
+    abi: ABI.USDC,
     client: PROVIDER_OP,
   }),
 };
