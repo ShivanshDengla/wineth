@@ -4,7 +4,7 @@ export const getContractSymbols = async () => {
   try {
 
     // Fetch symbols and names using the `read` method
-    const vaultName = await CONTRACTS.USDCVAULT.read.name();
+    const vaultName = await CONTRACTS.USDCVAULT.read.totalAssets();
 
     return {
       vaultName,
