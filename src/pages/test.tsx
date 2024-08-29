@@ -5,8 +5,11 @@ import { getPrizes } from '../fetch/getPrizes';
 import { getEthPrice } from '../fetch/getEthPrice';
 import { getContractSymbols } from '../fetch/getContractSymbols';
 import { getTvl } from '../fetch/getTvl';
+import { getUser } from '../fetch/getUser';
 
 const PrizePoolPage = () => {
+  const userAddress = '0x15E9Bc2BEBcCF1FFB4b955655A7666F509e66DBE'; // remove later
+
   const [data, setData] = useState<{ accountedBalance: string | null, grandPrizeLiquidity: string | null }>({
     accountedBalance: null,
     grandPrizeLiquidity: null,
@@ -14,22 +17,29 @@ const PrizePoolPage = () => {
   const [ethPrice, setEthPrice] = useState<number | null>(null);
   const [contractSymbols, setContractSymbols] = useState<{ vaultName: string | null }>({ vaultName: null });
   const [tvl, setTvl] = useState<string | null>(null);
+  const [userData, setUserData] = useState<{
+    UserDepositTokens: string;
+    UserAllowance: string;
+    UserVaultTokens: string;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [prizePoolData, ethPrice, contractSymbols, tvl] = await Promise.all([
+        const [prizePoolData, ethPrice, contractSymbols, tvl, userData] = await Promise.all([
           getPrizes(),
           getEthPrice(),
           getContractSymbols(),
           getTvl(),
+          getUser(userAddress), // Pass the hardcoded userAddress
         ]);
         setData(prizePoolData);
         setEthPrice(ethPrice);
         setContractSymbols(contractSymbols);
         setTvl(tvl);
+        setUserData(userData);
       } catch (err: any) {
         setError(`Failed to fetch data: ${err.message}`);
       } finally {
@@ -38,7 +48,7 @@ const PrizePoolPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [userAddress]); // Dependency array includes userAddress
 
   const formatToEth = (value: string | null) => {
     if (value === null) return 'N/A';
@@ -62,7 +72,11 @@ const PrizePoolPage = () => {
       <p>Tier 0 Remaining Liquidity: {formatToEth(data.grandPrizeLiquidity)} ETH</p>
       <p>Tier 0 Remaining Liquidity: ${calculateUsdValue(data.grandPrizeLiquidity)}</p>
       <p>Contract Vault Name: {contractSymbols.vaultName || 'N/A'}</p>
-      <p>Total Value Locked (TVL): {tvl || 'N/A'}</p>
+      <p>Total Value Locked (TVL): {tvl || 'N/A'} USDC</p>
+      <h2>User Data</h2>
+      <p>User Deposit Tokens: {userData?.UserDepositTokens || 'N/A'} USDC</p>
+      <p>User Allowance: {userData?.UserAllowance || 'N/A'} USDC</p>
+      <p>User Vault Tokens: {userData?.UserVaultTokens || 'N/A'}</p>
     </div>
   );
 };
