@@ -25,4 +25,9 @@ export const CONTRACTS = {
     abi: ABI.USDC,
     client: PROVIDER_OP,
   }),
+  TWABREWARDS: getContract({
+    address: ADDRESS.TWABREWARDS,
+    abi: ABI.TWABREWARDS,
+    client: PROVIDER_OP,
+  }),
 };
