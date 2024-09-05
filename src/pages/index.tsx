@@ -7,6 +7,7 @@ import Tvl from '../components/Tvl';
 import Prizes from '../components/Prizes';
 import UserBalances from '../components/UserBalances';
 import RewardsAPR from '../components/rewardsAPR';
+import RewardsComponent from '../components/RewardsComponent';
 
 const Home: NextPage = () => {
   return (
@@ -22,8 +23,8 @@ const Home: NextPage = () => {
 
         <Prizes />
         <Tvl />
-        <RewardsAPR />
         <UserBalances />
+        <RewardsComponent />
       </main>
     </div>
   );
