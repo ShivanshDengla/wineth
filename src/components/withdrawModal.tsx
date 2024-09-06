@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { getUser } from '../fetch/getUser';
 import { ADDRESS } from '../constants/address';
 import { ABI } from '../constants/abi';
 import Modal from './modal';
+import { parseUnits } from 'viem';
 
 interface WithdrawModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
+const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSuccess }) => {
   const { address, chain } = useAccount();
+  const publicClient = usePublicClient();
+  const { data: walletClient } = useWalletClient();
   const [amount, setAmount] = useState<string>('');
   const [userBalances, setUserBalances] = useState<{
     UserDepositTokens: bigint;
@@ -28,19 +32,15 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
   }, [address]);
 
   const getUserData = async () => {
+    if (!address) return;
     try {
-      const data = await getUser(address as string);
+      const data = await getUser(address);
       setUserBalances(data);
     } catch (err) {
+      console.error('Failed to fetch user data:', err);
       setError('Failed to fetch user data.');
     }
   };
-
-  const { writeContract: withdrawContract, data: withdrawHash, isPending: isWithdrawPending } = useWriteContract();
-
-  const { isLoading: isWithdrawLoading, isSuccess: isWithdrawConfirmed } = useWaitForTransactionReceipt({
-    hash: withdrawHash,
-  });
 
   const handleWithdraw = async () => {
     if (chain?.id !== 10) {
@@ -48,45 +48,62 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
       return;
     }
 
+    if (!walletClient) {
+      setError('Wallet not connected.');
+      return;
+    }
+
     setIsProcessing(true);
+    setError('');
+    
     try {
       const amountAsNumber = parseFloat(amount);
 
-      if (isNaN(amountAsNumber)) {
-        setError('Invalid amount');
-        setIsProcessing(false);
-        return;
+      if (isNaN(amountAsNumber) || amountAsNumber <= 0) {
+        throw new Error('Invalid amount');
       }
 
-      const withdrawAmount = BigInt(Math.floor(amountAsNumber * 10 ** 6)); // Assuming USDC has 6 decimals
+      const withdrawAmount = parseUnits(amount, 6); // Assuming USDC has 6 decimals
 
       if (userBalances && withdrawAmount > userBalances.UserVaultTokens) {
-        setError('Insufficient balance in vault');
-        setIsProcessing(false);
-        return;
+        throw new Error('Insufficient balance in vault');
       }
+
+      // Estimate gas
+      const gasEstimate = await publicClient.estimateContractGas({
+        address: ADDRESS.USDCVAULT,
+        abi: ABI.USDCVAULT,
+        functionName: 'withdraw',
+        args: [withdrawAmount, address, address],
+        account: address,
+      });
 
       // Proceed with withdrawal
-      try {
-        const withdrawTx = await withdrawContract({
-          address: ADDRESS.USDCVAULT,
-          abi: ABI.USDCVAULT,
-          functionName: 'withdraw',  // Ensure this matches the contract method
-          args: [withdrawAmount, address, address],
-        });
+      const hash = await walletClient.writeContract({
+        address: ADDRESS.USDCVAULT,
+        abi: ABI.USDCVAULT,
+        functionName: 'withdraw',
+        args: [withdrawAmount, address, address],
+        gas: gasEstimate,
+      });
 
-        const receipt = await withdrawTx.wait();
-        if (receipt.status === 1) { // Transaction successful
-          await getUserData(); // Refresh user balances after withdrawal
-          onClose(); // Close the modal on success
-        } else {
-          setError('Transaction failed.');
-        }
-      } catch (err) {
-        setError('Failed to process the transaction.');
+      console.log('Withdrawal transaction submitted:', hash);
+      
+      // Wait for transaction confirmation
+      const receipt = await publicClient.waitForTransactionReceipt({ hash });
+      
+      if (receipt.status === 'success') {
+        console.log('Withdrawal successful:', receipt);
+        await getUserData(); // Refresh user balances after withdrawal
+        onSuccess?.(); // Call onSuccess if provided
+        onClose(); // Close the modal on success
+      } else {
+        throw new Error('Transaction failed');
       }
-    } catch (err) {
-      setError('Failed to process the transaction.');
+
+    } catch (err: any) {
+      console.error('Withdrawal error:', err);
+      setError(`Failed to process the transaction: ${err.message}`);
     } finally {
       setIsProcessing(false);
     }
@@ -114,7 +131,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
         return;
       }
 
-      const amountInBigInt = BigInt(Math.floor(amountAsNumber * 10 ** 6)); // Assuming USDC has 6 decimals
+      const amountInBigInt = parseUnits(value, 6); // Assuming USDC has 6 decimals
 
       if (userBalances && amountInBigInt > userBalances.UserVaultTokens) {
         setError('Insufficient balance in vault');
@@ -130,36 +147,35 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="withdraw-modal">
-        <h2>Withdraw USDC</h2>
+      <div className="withdraw-modal p-6 bg-white rounded-lg shadow-xl">
+        <h2 className="text-2xl font-bold mb-4">Withdraw USDC</h2>
         {userBalances ? (
           <>
-            <div>
-              <label>Amount:</label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Amount:</label>
               <input
                 type="text"
-                className="border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={amount}
                 onChange={handleAmountChange}
-                disabled={isProcessing || isWithdrawPending}
+                disabled={isProcessing}
               />
-              {error && <p className="error">{error}</p>}
+              {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
             </div>
             <button
-              className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
+              className="w-full bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700 transition duration-300 disabled:opacity-50"
               onClick={handleWithdraw}
-              disabled={!!error || isProcessing || !amount || isWithdrawPending || chain?.id !== 10}
+              disabled={!!error || isProcessing || !amount || chain?.id !== 10}
             >
               {isProcessing ? 'Processing...' : 'Withdraw'}
             </button>
           </>
         ) : (
-          <p>Loading...</p>
+          <p className="text-gray-600">Loading user data...</p>
         )}
-        {withdrawHash && <div>Withdraw Transaction Hash: {withdrawHash}</div>}
-        {isWithdrawLoading && <div>Waiting for withdrawal confirmation...</div>}
-        {isWithdrawConfirmed && <div>Withdrawal confirmed.</div>}
-        {chain?.id !== 10 && <p className="error">Please connect to the Optimism network to proceed.</p>}
+        {chain?.id !== 10 && (
+          <p className="text-red-500 mt-4">Please connect to the Optimism network to proceed.</p>
+        )}
       </div>
     </Modal>
   );
