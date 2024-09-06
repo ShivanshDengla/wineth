@@ -6,7 +6,6 @@ import styles from '../styles/Home.module.css';
 import Tvl from '../components/Tvl';
 import Prizes from '../components/Prizes';
 import UserBalances from '../components/UserBalances';
-import RewardsAPR from '../components/rewardsAPR';
 import RewardsComponent from '../components/RewardsComponent';
 
 const Home: NextPage = () => {
