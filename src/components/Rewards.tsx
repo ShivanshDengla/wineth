@@ -2,12 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { CONTRACTS } from '../constants/contracts';
 import { REWARDS } from '../constants/rewards';
-import AprComponent from './AprComponent';
-import UserRewards from './userRewards';
+import RewardsApr from './RewardsApr';
+import RewardsUser from './RewardsUser';
 import ClaimComponent from './ClaimComponent';
 import { useAccount } from 'wagmi';
 
-const RewardsComponent: React.FC = () => {
+const Rewards: React.FC = () => {
   const { address } = useAccount();
   const [completedEpochs, setCompletedEpochs] = useState<number[]>([]);
   const [promotionData, setPromotionData] = useState<any[]>([]);
@@ -85,11 +85,11 @@ const RewardsComponent: React.FC = () => {
   return (
     <div>
       <h1>Rewards Overview</h1>
-      <AprComponent promotionData={promotionData} />
-      <UserRewards completedEpochs={completedEpochs} promotionData={promotionData} />
+      <RewardsApr promotionData={promotionData} />
+      <RewardsUser completedEpochs={completedEpochs} promotionData={promotionData} />
       <ClaimComponent promotionData={promotionData} rewardAmounts={[]} />
     </div>
   );
 };
 
-export default RewardsComponent;
+export default Rewards;

@@ -23,7 +23,7 @@ interface PromotionData {
   aprValue?: number;
 }
 
-const AprComponent: React.FC = () => {
+const RewardsApr: React.FC = () => {
   const [promotionData, setPromotionData] = useState<PromotionData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -139,4 +139,4 @@ const AprComponent: React.FC = () => {
   );
 };
 
-export default AprComponent;
+export default RewardsApr;

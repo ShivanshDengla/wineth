@@ -4,7 +4,7 @@ import { getUser } from '../fetch/getUser';
 import { ADDRESS } from '../constants/address';
 import { ABI } from '../constants/abi';
 
-import Modal from './modal';
+import Modal from './Modal';
 
 interface DepositModalProps {
   isOpen: boolean;

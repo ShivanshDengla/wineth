@@ -3,7 +3,7 @@ import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { getUser } from '../fetch/getUser';
 import { ADDRESS } from '../constants/address';
 import { ABI } from '../constants/abi';
-import Modal from './modal';
+import Modal from './Modal';
 import { parseUnits } from 'viem';
 
 interface WithdrawModalProps {

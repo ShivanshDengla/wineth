@@ -13,7 +13,7 @@ export interface Reward {
   amounts: number[];
 }
 
-const UserRewards: React.FC<UserRewardsProps> = ({ completedEpochs, promotionData }) => {
+const RewardsUser: React.FC<UserRewardsProps> = ({ completedEpochs, promotionData }) => {
   const { address } = useAccount();
   const [rewardsData, setRewardsData] = useState<Reward[]>([]);
   const [loadingRewards, setLoadingRewards] = useState(true);
@@ -93,4 +93,4 @@ const UserRewards: React.FC<UserRewardsProps> = ({ completedEpochs, promotionDat
   );
 };
 
-export default UserRewards;
+export default RewardsUser;
