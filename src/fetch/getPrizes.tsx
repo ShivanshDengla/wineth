@@ -1,4 +1,4 @@
-import { PROVIDER_OP } from '../wagmi'; // Assuming this is where your provider is defined
+import { PROVIDER } from '../wagmi'; // Assuming this is where your provider is defined
 import { ABI } from '../constants/abi';
 import { ADDRESS } from '../constants/address';
 
@@ -14,7 +14,7 @@ export async function getPrizes(): Promise<PrizeData> {
   } as const;
 
   try {
-    const results = await PROVIDER_OP.multicall({
+    const results = await PROVIDER.multicall({
       contracts: [
         {
           ...prizePoolContract,
