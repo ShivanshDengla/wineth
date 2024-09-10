@@ -2,15 +2,15 @@
 import { useEffect, useState } from 'react';
 import { getUser } from '../fetch/getUser';
 import { useAccount } from 'wagmi';
-import DepositModal from '../components/depositModal';
-import WithdrawModal from '../components/withdrawModal';
+import DepositModal from './DepositModal';
+import WithdrawModal from './WithdrawModal';
 
 const UserBalances = () => {
   const { address } = useAccount();
   const [userData, setUserData] = useState<{
-    UserDepositTokens: string;
-    UserAllowance: string;
-    UserVaultTokens: string;
+    UserDepositTokens: bigint;
+    UserAllowance: bigint;
+    UserVaultTokens: bigint;
   } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,7 +41,7 @@ const UserBalances = () => {
   return (
     <div>
       <h2>User Data</h2>
-      <p>User Deposit Tokens: {userData?.UserDepositTokens || 'N/A'} USDC</p>
+      <p>User Deposit Tokens: {userData?.UserDepositTokens.toString() || 'N/A'} USDC</p>
       <button 
         onClick={() => setIsDepositModalOpen(true)} 
         className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
@@ -53,12 +53,12 @@ const UserBalances = () => {
         onClose={() => setIsDepositModalOpen(false)} 
         onSuccess={fetchUserData}
       />
-      <p>User Allowance: {userData?.UserAllowance || 'N/A'} USDC</p>
-      <p>User Vault Tokens: {userData?.UserVaultTokens || 'N/A'}</p>
+      <p>User Allowance: {userData?.UserAllowance.toString() || 'N/A'} USDC</p>
+      <p>User Vault Tokens: {userData?.UserVaultTokens.toString() || 'N/A'}</p>
       <button 
         onClick={() => setIsWithdrawModalOpen(true)} 
         className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
-        disabled={!userData || userData.UserVaultTokens === '0'}
+        disabled={!userData || userData.UserVaultTokens.toString() === '0'}
       >
         Open Withdraw Modal
       </button>

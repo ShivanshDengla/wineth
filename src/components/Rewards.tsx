@@ -2,12 +2,18 @@
 import React, { useEffect, useState } from 'react';
 import { CONTRACTS } from '../constants/contracts';
 import { REWARDS } from '../constants/rewards';
-import AprComponent from './AprComponent';
-import UserRewards from './userRewards';
+import RewardsApr from './RewardsApr';
+import RewardsUser from './RewardsUser';
 import ClaimComponent from './ClaimComponent';
 import { useAccount } from 'wagmi';
 
-const RewardsComponent: React.FC = () => {
+interface Promotion {
+  startTimestamp: string;
+  numberOfEpochs: string;
+  epochDuration: string;
+}
+
+const Rewards: React.FC = () => {
   const { address } = useAccount();
   const [completedEpochs, setCompletedEpochs] = useState<number[]>([]);
   const [promotionData, setPromotionData] = useState<any[]>([]);
@@ -24,7 +30,7 @@ const RewardsComponent: React.FC = () => {
           const { PROMOTION } = reward;
 
           try {
-            const promotion = await CONTRACTS.TWABREWARDS.read.getPromotion([PROMOTION]);
+            const promotion = await CONTRACTS.TWABREWARDS.read.getPromotion([PROMOTION]) as Promotion;
             const startTimestamp = parseInt(promotion.startTimestamp);
             const numberOfEpochs = parseInt(promotion.numberOfEpochs);
             const epochDuration = parseInt(promotion.epochDuration);
@@ -50,7 +56,7 @@ const RewardsComponent: React.FC = () => {
         setPromotionData(promotionDetails);
       } catch (err) {
         console.error('Error fetching promotion data:', err);
-        setError(`Failed to fetch promotion data: ${err.message}`);
+        setError(`Failed to fetch promotion data: ${(err as Error).message}`);
       } finally {
         setLoading(false);
       }
@@ -85,11 +91,11 @@ const RewardsComponent: React.FC = () => {
   return (
     <div>
       <h1>Rewards Overview</h1>
-      <AprComponent promotionData={promotionData} />
-      <UserRewards completedEpochs={completedEpochs} promotionData={promotionData} />
+      <RewardsApr/>
+      <RewardsUser completedEpochs={completedEpochs} promotionData={promotionData} />
       <ClaimComponent promotionData={promotionData} rewardAmounts={[]} />
     </div>
   );
 };
 
-export default RewardsComponent;
+export default Rewards;

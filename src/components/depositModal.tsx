@@ -4,11 +4,12 @@ import { getUser } from '../fetch/getUser';
 import { ADDRESS } from '../constants/address';
 import { ABI } from '../constants/abi';
 
-import Modal from './modal';
+import Modal from './Modal';
 
 interface DepositModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess: () => void;
 }
 
 const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
@@ -79,23 +80,25 @@ const { writeContract: depositContract, data: depositHash, isPending: isDepositP
           address: ADDRESS.USDC,
           abi: ABI.USDC,
           functionName: 'approve',
-          args: [ADDRESS.USDCVAULT, depositAmount],
+          args: [ADDRESS.VAULT.ADDRESS, depositAmount],
         });
       } else {
         try {
           // Proceed with deposit
           const depositTx = depositContract({
-            address: ADDRESS.USDCVAULT,
+            address: ADDRESS.VAULT.ADDRESS,
             abi: ABI.USDCVAULT,
             functionName: 'deposit',
             args: [depositAmount, address],
           });
         
-          const receipt = await depositTx.wait();
-          if (receipt.status === 1) { // Transaction successful
-            await getUserData(); // Refresh user balances after deposit
-            onClose();
-          }
+          // TODO usewaittransaction
+
+          // const receipt = await depositTx.wait();
+          // if (receipt.status === 1) { // Transaction successful
+          //   await getUserData(); // Refresh user balances after deposit
+          //   onClose();
+          // }
         } catch (err) {
           setError('Failed to process the transaction.');
         }
