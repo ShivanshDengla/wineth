@@ -1,3 +1,4 @@
+// components/ClaimComponent.tsx
 import React, { useState } from 'react';
 import { CONTRACTS } from '../constants/contracts';
 import { useAccount } from 'wagmi';
@@ -22,12 +23,10 @@ const ClaimComponent: React.FC<ClaimComponentProps> = ({ promotionData, rewardAm
     setError(null);
 
     try {
-      // Assuming the contract has a claim function that takes the promotion ID
       const tx = await CONTRACTS.TWABREWARDS.write.claim([promotionId]);
-
-      // TODO usetransactionwait
-      // await tx.wait();
-      // setClaimStatus(prev => ({ ...prev, [index]: 'Claimed' }));
+      // Assuming the claim process needs transaction confirmation
+      // TODO: Add logic to wait for transaction confirmation (like using useWaitForTransactionReceipt)
+      setClaimStatus(prev => ({ ...prev, [index]: 'Claimed' }));
     } catch (err: any) {
       console.error('Error claiming reward:', err);
       setClaimStatus(prev => ({ ...prev, [index]: 'Failed' }));
@@ -42,17 +41,17 @@ const ClaimComponent: React.FC<ClaimComponentProps> = ({ promotionData, rewardAm
   return (
     <div>
       <h2>Claim Rewards</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="error">{error}</p>}
       {promotionData.length > 0 ? (
         promotionData.map((promo, index) => {
           const rewardAmount = rewardAmounts[index] || 0;
           const isClaimable = rewardAmount > 0;
           return (
-            <div key={index}>
+            <div key={promo.PROMOTION}>
               <h3>Promotion {promo.PROMOTION}</h3>
               <p>Claimable Reward: {rewardAmount.toFixed(6)} tokens</p>
               <p>Claim Status: {claimStatus[index] || 'Not claimed'}</p>
-              <button 
+              <button
                 onClick={() => handleClaim(promo.PROMOTION, index)}
                 disabled={!isClaimable || claimStatus[index] === 'Claimed' || claimStatus[index] === 'Claiming...'}
               >
