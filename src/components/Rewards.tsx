@@ -7,6 +7,12 @@ import RewardsUser from './RewardsUser';
 import ClaimComponent from './ClaimComponent';
 import { useAccount } from 'wagmi';
 
+interface Promotion {
+  startTimestamp: string;
+  numberOfEpochs: string;
+  epochDuration: string;
+}
+
 const Rewards: React.FC = () => {
   const { address } = useAccount();
   const [completedEpochs, setCompletedEpochs] = useState<number[]>([]);
@@ -24,7 +30,7 @@ const Rewards: React.FC = () => {
           const { PROMOTION } = reward;
 
           try {
-            const promotion = await CONTRACTS.TWABREWARDS.read.getPromotion([PROMOTION]);
+            const promotion = await CONTRACTS.TWABREWARDS.read.getPromotion([PROMOTION]) as Promotion;
             const startTimestamp = parseInt(promotion.startTimestamp);
             const numberOfEpochs = parseInt(promotion.numberOfEpochs);
             const epochDuration = parseInt(promotion.epochDuration);
@@ -50,7 +56,7 @@ const Rewards: React.FC = () => {
         setPromotionData(promotionDetails);
       } catch (err) {
         console.error('Error fetching promotion data:', err);
-        setError(`Failed to fetch promotion data: ${err.message}`);
+        setError(`Failed to fetch promotion data: ${(err as Error).message}`);
       } finally {
         setLoading(false);
       }
@@ -85,7 +91,7 @@ const Rewards: React.FC = () => {
   return (
     <div>
       <h1>Rewards Overview</h1>
-      <RewardsApr promotionData={promotionData} />
+      <RewardsApr/>
       <RewardsUser completedEpochs={completedEpochs} promotionData={promotionData} />
       <ClaimComponent promotionData={promotionData} rewardAmounts={[]} />
     </div>

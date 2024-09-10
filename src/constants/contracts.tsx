@@ -11,12 +11,12 @@ export const CONTRACTS = {
     client: PROVIDER_OP,
   }),
   WETHPRIZE: getContract({
-    address: ADDRESS.WETHPRIZE,
+    address: ADDRESS.PRIZETOKEN.ADDRESS,
     abi: ABI.WETHPRIZE,
     client: PROVIDER_OP,
   }),
   USDCVAULT: getContract({
-    address: ADDRESS.USDCVAULT,
+    address: ADDRESS.VAULT.ADDRESS,
     abi: ABI.USDCVAULT,
     client: PROVIDER_OP,
   }),

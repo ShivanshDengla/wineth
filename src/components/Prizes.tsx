@@ -2,11 +2,13 @@
 import { useEffect, useState } from 'react';
 import { getPrizes } from '../fetch/getPrizes';
 
+interface PrizeData {
+  accountedBalance: bigint;
+  grandPrizeLiquidity: bigint;
+}
+
 const Prizes = () => {
-  const [data, setData] = useState<{ accountedBalance: string | null, grandPrizeLiquidity: string | null }>({
-    accountedBalance: null,
-    grandPrizeLiquidity: null,
-  });
+  const [data, setData] = useState<PrizeData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,7 +16,13 @@ const Prizes = () => {
     const fetchPrizes = async () => {
       try {
         const prizeData = await getPrizes();
-        setData(prizeData);
+        if (prizeData !== null) {
+          // todo typing force
+          setData(prizeData as any);
+        } else {
+          setError('Failed to fetch prize data');
+        }
+        
       } catch (err: any) {
         setError(`Failed to fetch prize data: ${err.message}`);
       } finally {
@@ -25,15 +33,9 @@ const Prizes = () => {
     fetchPrizes();
   }, []);
 
-  const formatToEth = (value: string | null) => {
+  const formatToEth = (value: bigint | null) => {
     if (value === null) return 'N/A';
-    return (parseFloat(value) / 1e18).toFixed(4);
-  };
-
-  const calculateUsdValue = (ethAmount: string | null, ethPrice: number | null) => {
-    if (ethAmount === null || ethPrice === null) return 'N/A';
-    const ethValue = parseFloat(ethAmount) / 1e18;
-    return (ethValue * ethPrice).toFixed(2);
+    return (Number(value) / 1e18).toFixed(4); // Converting bigint to number for display
   };
 
   if (loading) return <div>Loading Prizes...</div>;
@@ -41,8 +43,8 @@ const Prizes = () => {
 
   return (
     <div>
-      <p>Accounted Balance: {formatToEth(data.accountedBalance)} ETH</p>
-      <p>Tier 0 Remaining Liquidity: {formatToEth(data.grandPrizeLiquidity)} ETH</p>
+      <p>Accounted Balance: {formatToEth(data?.accountedBalance || null)} ETH</p>
+      <p>Tier 0 Remaining Liquidity: {formatToEth(data?.grandPrizeLiquidity || null)} ETH</p>
     </div>
   );
 };

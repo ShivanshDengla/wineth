@@ -4,7 +4,7 @@ import { getTvl } from '../fetch/getTvl';
 import { getTokenPrice } from '../fetch/getTokenPrice';
 
 const Tvl = () => {
-  const [tvl, setTvl] = useState<string | null>(null);
+  const [tvl, setTvl] = useState<bigint | null>(null);
   const [ethPrice, setEthPrice] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +34,7 @@ const Tvl = () => {
 
   return (
     <div>
-      <p>Total Value Locked (TVL): {tvl || 'N/A'} USDC</p>
+      <p>Total Value Locked (TVL): {tvl?.toString() || 'N/A'} USDC</p>
       <p>Ethereum Price: {ethPrice ? `$${ethPrice.toFixed(2)}` : 'N/A'}</p>
     </div>
   );

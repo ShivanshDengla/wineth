@@ -2,7 +2,12 @@ import { PROVIDER_OP } from '../wagmi'; // Assuming this is where your provider 
 import { ABI } from '../constants/abi';
 import { ADDRESS } from '../constants/address';
 
-export async function getPrizes() {
+interface PrizeData {
+  accountedBalance: bigint | null;
+  grandPrizeLiquidity: bigint | null;
+}
+
+export async function getPrizes(): Promise<PrizeData> {
   const prizePoolContract = {
     address: ADDRESS.PRIZEPOOL,
     abi: ABI.PRIZEPOOL,
@@ -23,11 +28,12 @@ export async function getPrizes() {
       ],
     });
 
-    const accountedBalance = results[0].result;
-    const grandPrizeLiquidity = results[1].result;
+    const accountedBalance: bigint = results[0].result as bigint;
+    const grandPrizeLiquidity: bigint = results[1].result as bigint;
+
     return { accountedBalance, grandPrizeLiquidity };
   } catch (error) {
     console.error('Error fetching prize pool data:', error);
-    return { accountedBalance: null, tierRemainingLiquidity: null };
+    return { accountedBalance: null, grandPrizeLiquidity: null };
   }
 }

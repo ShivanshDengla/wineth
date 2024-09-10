@@ -9,7 +9,7 @@ export const getUser = async (userAddress: string) => {
   } as const;
 
   const usdcVaultContract = {
-    address: ADDRESS.USDCVAULT,
+    address: ADDRESS.VAULT.ADDRESS,
     abi: ABI.USDCVAULT,
   } as const;
 
@@ -34,9 +34,9 @@ export const getUser = async (userAddress: string) => {
       ],
     });
 
-    const userDepositTokens = results[0].result.toString();
-    const userAllowance = results[1].result.toString();
-    const userVaultTokens = results[2].result.toString();
+    const userDepositTokens = results[0].result as bigint;
+    const userAllowance = results[1].result as bigint;
+    const userVaultTokens = results[2].result as bigint;
 
     return {
       UserDepositTokens: userDepositTokens,

@@ -36,11 +36,11 @@ const RewardsUser: React.FC<UserRewardsProps> = ({ completedEpochs, promotionDat
           console.log(`Fetching rewards for Promotion ID ${PROMOTION} and Epochs: ${completedEpochs}`);
 
           // Fetch reward amounts from the contract
-          const rewardArray = await CONTRACTS.TWABREWARDS.read.getRewardsAmount([
+          const rewardArray: bigint[] = await CONTRACTS.TWABREWARDS.read.getRewardsAmount([
             address,
             PROMOTION,
             completedEpochs
-          ]);
+          ]) as bigint[]
 
           const rewardAmounts: number[] = rewardArray.map((reward: bigint, index: number) => {
             const rewardAmount = Number(reward) / 1e18;

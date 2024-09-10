@@ -53,6 +53,11 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
       return;
     }
 
+    if (!publicClient) {
+      setError('Public client not available.');
+      return;
+    }
+
     setIsProcessing(true);
     setError('');
     
@@ -71,7 +76,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
 
       // Estimate gas
       const gasEstimate = await publicClient.estimateContractGas({
-        address: ADDRESS.USDCVAULT,
+        address: ADDRESS.VAULT.ADDRESS,
         abi: ABI.USDCVAULT,
         functionName: 'withdraw',
         args: [withdrawAmount, address, address],
@@ -80,7 +85,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
 
       // Proceed with withdrawal
       const hash = await walletClient.writeContract({
-        address: ADDRESS.USDCVAULT,
+        address: ADDRESS.VAULT.ADDRESS,
         abi: ABI.USDCVAULT,
         functionName: 'withdraw',
         args: [withdrawAmount, address, address],
@@ -90,6 +95,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
       console.log('Withdrawal transaction submitted:', hash);
       
       // Wait for transaction confirmation
+      // TODO use wait for transaction
       const receipt = await publicClient.waitForTransactionReceipt({ hash });
       
       if (receipt.status === 'success') {
