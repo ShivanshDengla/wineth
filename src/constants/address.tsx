@@ -13,7 +13,9 @@ interface TokenInfo {
     USDC: Address;
     TWABREWARDS: Address;
   }
-  
+
+// op usdc
+/*
 export const ADDRESS: AddressMap = {
     PRIZEPOOL: '0xF35fE10ffd0a9672d0095c435fd8767A7fe29B55',
     PRIZETOKEN: {
@@ -28,4 +30,21 @@ export const ADDRESS: AddressMap = {
     },
     USDC: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
     TWABREWARDS: '0x90D383dEA4dcE52D3e5D3C93dE75eF36da3Ea9Ea',
+  };
+  */
+ // base usdc
+  export const ADDRESS: AddressMap = {
+    PRIZEPOOL: '0x45b2010d8a4f08b53c9fa7544c51dfd9733732cb',
+    PRIZETOKEN: {
+      ADDRESS: '0x4200000000000000000000000000000000000006',
+      SYMBOL: 'WETH',
+      DECIMALS: 18,
+    },
+    VAULT: {
+      ADDRESS: '0x7f5c2b379b88499ac2b997db583f8079503f25b9',
+      SYMBOL: 'USDC',
+      DECIMALS: 6,
+    },
+    USDC: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+    TWABREWARDS: '0x86f0923d20810441efc593eb0f2825c6bff2dc09',
   };
