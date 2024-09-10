@@ -1,16 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { getTokenPrice } from "../fetch/getTokenPrice";
-import { getTvl } from "../fetch/getTvl";
-import { CONTRACTS } from "../constants/contracts";
-import { REWARDS } from "../constants/rewards";
-import { formatUnits } from "viem";
-import { ADDRESS } from "../constants/address";
-interface Promotion {
-  startTimestamp: string;
-  numberOfEpochs: string;
-  epochDuration: string;
-  tokensPerEpoch: string;
-}
+import React from "react";
 
 interface PromotionData {
   PROMOTION: number;
@@ -24,91 +12,11 @@ interface PromotionData {
   aprValue?: number;
 }
 
-const RewardsApr: React.FC = () => {
-  const [promotionData, setPromotionData] = useState<PromotionData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface RewardsAprProps {
+  promotionData: PromotionData[];
+}
 
-  useEffect(() => {
-    const fetchPromotionData = async () => {
-      try {
-        const currentTimestamp = Math.floor(Date.now() / 1000);
-        const promotionDetails: PromotionData[] = [];
-
-        for (const reward of REWARDS) {
-          const { PROMOTION, SYMBOL, GECKO } = reward;
-
-          try {
-            // Fetch promotion details from the contract
-            const promotion = (await CONTRACTS.TWABREWARDS.read.getPromotion([
-              PROMOTION,
-            ])) as Promotion;
-
-            const startTimestamp = parseInt(promotion.startTimestamp);
-            const numberOfEpochs = parseInt(promotion.numberOfEpochs);
-            const epochDuration = parseInt(promotion.epochDuration);
-            const tokensPerEpoch = parseFloat(promotion.tokensPerEpoch);
-            const promoEnd = startTimestamp + numberOfEpochs * epochDuration;
-
-            // Ensure the promotion is active
-            if (
-              currentTimestamp < startTimestamp ||
-              currentTimestamp > promoEnd
-            ) {
-              console.warn(
-                `Promotion ${PROMOTION} for ${SYMBOL} is not currently active.`
-              );
-              continue;
-            }
-
-            // Calculate tokens per second and tokens per year
-            const tokensPerSecond = tokensPerEpoch / epochDuration;
-            const tokensPerYear =
-              (tokensPerSecond / reward.DECIMALS) * (365 * 24 * 60 * 60);
-
-            // Fetch token price and TVL
-            const tokenPrice = await getTokenPrice(GECKO);
-            const tvl = await getTvl();
-            const adjustedTvl = formatUnits(tvl, ADDRESS.VAULT.DECIMALS);
-
-            // Calculate APR
-            const aprValue = (tokensPerYear * tokenPrice) / parseFloat(adjustedTvl);
-
-            promotionDetails.push({
-              PROMOTION,
-              SYMBOL,
-              startTimestamp,
-              promoEnd,
-              completedEpochs: Array.from(
-                { length: numberOfEpochs },
-                (_, i) => i
-              ),
-              tokensPerYear,
-              tokenPrice,
-              tvl: adjustedTvl,
-              aprValue,
-            });
-          } catch (error) {
-            console.error(
-              `Failed to fetch data for promotion ${PROMOTION} (${SYMBOL}):`,
-              error
-            );
-            continue;
-          }
-        }
-
-        setPromotionData(promotionDetails);
-      } catch (err: any) {
-        console.error("Error fetching promotion data:", err);
-        setError(`Failed to calculate promotion data: ${err.message}`);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPromotionData();
-  }, []);
-
+const RewardsApr: React.FC<RewardsAprProps> = ({ promotionData }) => {
   const calculateTimeRemaining = (endTimestamp: number) => {
     const now = Math.floor(Date.now() / 1000);
     const timeRemaining = endTimestamp - now;
@@ -125,9 +33,6 @@ const RewardsApr: React.FC = () => {
   const formatNumber = (value: number | undefined, decimals: number = 2) => {
     return value !== undefined ? value.toFixed(decimals) : "N/A";
   };
-
-  if (loading) return <div>Loading APR data...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <div>

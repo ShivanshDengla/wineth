@@ -6,17 +6,33 @@ import RewardsApr from './RewardsApr';
 import RewardsUser from './RewardsUser';
 import ClaimComponent from './ClaimComponent';
 import { useAccount } from 'wagmi';
+import { getTokenPrice } from "../fetch/getTokenPrice";
+import { getTvl } from "../fetch/getTvl";
+import { formatUnits } from "viem";
+import { ADDRESS } from "../constants/address";
 
 interface Promotion {
   startTimestamp: string;
   numberOfEpochs: string;
   epochDuration: string;
+  tokensPerEpoch: string;
+}
+
+interface PromotionData {
+  PROMOTION: number;
+  SYMBOL: string;
+  startTimestamp: number;
+  promoEnd: number;
+  completedEpochs: number[];
+  tokensPerYear?: number;
+  tokenPrice?: number;
+  tvl?: string;
+  aprValue?: number;
 }
 
 const Rewards: React.FC = () => {
   const { address } = useAccount();
-  const [completedEpochs, setCompletedEpochs] = useState<number[]>([]);
-  const [promotionData, setPromotionData] = useState<any[]>([]);
+  const [promotionData, setPromotionData] = useState<PromotionData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,29 +40,46 @@ const Rewards: React.FC = () => {
     const fetchPromotionData = async () => {
       try {
         const currentTimestamp = Math.floor(Date.now() / 1000);
-        const promotionDetails: any[] = [];
+        const promotionDetails: PromotionData[] = [];
 
         for (const reward of REWARDS) {
-          const { PROMOTION } = reward;
+          const { PROMOTION, SYMBOL, GECKO } = reward;
 
           try {
             const promotion = await CONTRACTS.TWABREWARDS.read.getPromotion([PROMOTION]) as Promotion;
             const startTimestamp = parseInt(promotion.startTimestamp);
             const numberOfEpochs = parseInt(promotion.numberOfEpochs);
             const epochDuration = parseInt(promotion.epochDuration);
+            const tokensPerEpoch = parseFloat(promotion.tokensPerEpoch);
             const promoEnd = startTimestamp + numberOfEpochs * epochDuration;
 
-            const completedEpochsTemp = getCompletedEpochs(startTimestamp, epochDuration, numberOfEpochs, currentTimestamp);
+            if (currentTimestamp < startTimestamp || currentTimestamp > promoEnd) {
+              console.warn(`Promotion ${PROMOTION} for ${SYMBOL} is not currently active.`);
+              continue;
+            }
+
+            const tokensPerSecond = tokensPerEpoch / epochDuration;
+            const tokensPerYear = (tokensPerSecond / reward.DECIMALS) * (365 * 24 * 60 * 60);
+
+            const tokenPrice = await getTokenPrice(GECKO);
+            const tvl = await getTvl();
+            const adjustedTvl = formatUnits(tvl, ADDRESS.VAULT.DECIMALS);
+
+            const aprValue = (tokensPerYear * tokenPrice) / parseFloat(adjustedTvl);
+
+            const completedEpochs = getCompletedEpochs(startTimestamp, epochDuration, numberOfEpochs, currentTimestamp);
+
             promotionDetails.push({
               PROMOTION,
+              SYMBOL,
               startTimestamp,
-              numberOfEpochs,
-              epochDuration,
               promoEnd,
-              completedEpochs: completedEpochsTemp,
+              completedEpochs,
+              tokensPerYear,
+              tokenPrice,
+              tvl: adjustedTvl,
+              aprValue,
             });
-
-            setCompletedEpochs(completedEpochsTemp);
           } catch (err) {
             console.error(`Error fetching promotion data for ${PROMOTION}:`, err);
             continue;
@@ -91,8 +124,8 @@ const Rewards: React.FC = () => {
   return (
     <div>
       <h1>Rewards Overview</h1>
-      <RewardsApr/>
-      <RewardsUser completedEpochs={completedEpochs} promotionData={promotionData} />
+      <RewardsApr promotionData={promotionData} />
+      <RewardsUser completedEpochs={promotionData.flatMap(p => p.completedEpochs)} promotionData={promotionData} />
       <ClaimComponent promotionData={promotionData} rewardAmounts={[]} />
     </div>
   );
