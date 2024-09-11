@@ -12,6 +12,7 @@ interface TokenInfo {
     VAULT: TokenInfo;
     USDC: Address;
     TWABREWARDS: Address;
+    PRIZEPOOLSUBGRAPH: string;
   }
 
 // op usdc
@@ -47,4 +48,5 @@ export const ADDRESS: AddressMap = {
     },
     USDC: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
     TWABREWARDS: '0x86f0923d20810441efc593eb0f2825c6bff2dc09',
+    PRIZEPOOLSUBGRAPH: "https://api.studio.thegraph.com/query/41211/pt-v5-base/version/latest",
   };

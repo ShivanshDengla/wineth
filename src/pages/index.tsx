@@ -7,6 +7,7 @@ import Tvl from '../components/Tvl';
 import Prizes from '../components/Prizes';
 import UserBalances from '../components/UserBalances';
 import Rewards from '../components/Rewards';
+import PrizesWon from '../components/prizesWon';
 
 const Home: NextPage = () => {
   return (
@@ -19,11 +20,11 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <ConnectButton />
-
         <Prizes />
         <Tvl />
         <UserBalances />
         <Rewards />
+        <PrizesWon />
       </main>
     </div>
   );

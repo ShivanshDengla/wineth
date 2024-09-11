@@ -2,8 +2,8 @@
 import { useEffect, useState } from 'react';
 import { getUser } from '../fetch/getUser';
 import { useAccount } from 'wagmi';
-import DepositModal from './DepositModal';
-import WithdrawModal from './WithdrawModal';
+import DepositModal from './depositModal';
+import WithdrawModal from './withdrawModal';
 
 const UserBalances = () => {
   const { address } = useAccount();
