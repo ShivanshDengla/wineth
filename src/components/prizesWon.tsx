@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchPrizes } from '../fetch/getPrizesWon';
 import { useAccount } from 'wagmi';
+import  PrizeValue  from './PrizeValue'
 
 interface PrizeClaim {
   id: string;
@@ -40,7 +41,7 @@ const PrizesWon: React.FC = () => {
     getPrizeClaims();
   }, [address, isConnected]);
 
-  const totalPayout = prizeClaims.reduce((acc, claim) => acc + parseFloat(claim.payout) / 1e18, 0);
+  const totalPayout = prizeClaims.reduce((acc, claim) => acc + parseFloat(claim.payout) , 0);
 
   if (!isConnected) return <div>Please connect your wallet to see prize claims.</div>;
   if (loading) return <div>Loading prize claims...</div>;
@@ -51,7 +52,7 @@ const PrizesWon: React.FC = () => {
       <h2>Prizes Won by {address}</h2>
       {prizeClaims.length > 0 ? (
         <div>
-          <p>Total Won: {totalPayout.toFixed(4)} tokens</p>
+          <p>Total Won: <PrizeValue amount={BigInt(totalPayout)}/></p>
           <button
             onClick={() => setShowAllWins(!showAllWins)}
             className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
@@ -63,8 +64,8 @@ const PrizesWon: React.FC = () => {
             <ul>
               {prizeClaims.map((claim) => (
                 <li key={claim.id}>
-                  <strong>Prize Vault:</strong> {claim.prizeVault.id} | 
-                  <strong> Payout:</strong> {(parseFloat(claim.payout) / 1e18).toFixed(4)} tokens | 
+                  {/* <strong>Prize Vault:</strong> {claim.prizeVault.id} |  */}
+                  <strong> Payout:</strong> <PrizeValue amount={BigInt(claim.payout)}/> | 
                   <strong> Timestamp:</strong> {new Date(parseInt(claim.timestamp) * 1000).toLocaleString()}
                 </li>
               ))}
