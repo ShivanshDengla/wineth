@@ -6,7 +6,7 @@ const SUBGRAPH_URL = ADDRESS.PRIZEPOOLSUBGRAPH;
 export const fetchPrizes = async (winnerAddress: string) => {
   const query = `
     {
-      prizeClaims(where: { winner: "${winnerAddress}", payout_gt: 0, prizeVault: "${ADDRESS.PRIZETOKEN.ADDRESS}" }) {
+      prizeClaims(where: { winner: "${winnerAddress}", payout_gt: 0, prizeVault: "${ADDRESS.VAULT.ADDRESS}" }) {
         id
         payout
         timestamp
