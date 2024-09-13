@@ -7,7 +7,7 @@ import Tvl from '../components/Tvl';
 import Prizes from '../components/Prizes';
 import UserBalances from '../components/UserBalances';
 import Rewards from '../components/Rewards';
-import PrizesWon from '../components/prizesWon';
+import PrizesWon from '../components/PrizesWon';
 
 const Home: NextPage = () => {
   return (

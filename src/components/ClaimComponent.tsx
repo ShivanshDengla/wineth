@@ -25,8 +25,9 @@ const ClaimComponent: React.FC<ClaimComponentProps> = ({ promotionData, rewardAm
       // Assuming the contract has a claim function that takes the promotion ID
       const tx = await CONTRACTS.TWABREWARDS.write.claim([promotionId]);
       // Handle transaction confirmation
-      await tx.wait();
-      setClaimStatus(prev => ({ ...prev, [index]: 'Claimed' }));
+      // todo usewaittransaction
+      // await tx.wait();
+      // setClaimStatus(prev => ({ ...prev, [index]: 'Claimed' }));
     } catch (err: any) {
       console.error('Error claiming reward:', err);
       setClaimStatus(prev => ({ ...prev, [index]: 'Failed' }));
