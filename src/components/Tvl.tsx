@@ -35,7 +35,7 @@ const Tvl = () => {
   return (
     <div>
       <p>Total Value Locked (TVL): {tvl?.toString() || 'N/A'} USDC</p>
-      <p>Ethereum Price: {ethPrice ? `$${ethPrice.toFixed(2)}` : 'N/A'}</p>
+      {/* <p>Ethereum Price: {ethPrice ? `$${ethPrice.toFixed(2)}` : 'N/A'}</p> */}
     </div>
   );
 };
