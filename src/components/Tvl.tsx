@@ -2,6 +2,9 @@
 import { useEffect, useState } from 'react';
 import { getTvl } from '../fetch/getTvl';
 import { getTokenPrice } from '../fetch/getTokenPrice';
+// import DisplayDepositTokenAmt from "./displayDepositTokenAmt"
+import ParseDepositTokenAmount from '../utilities/ParseDepositTokenAmount';
+import ParseVaultAmount from '../utilities/ParseVaultAmount';
 
 const Tvl = () => {
   const [tvl, setTvl] = useState<bigint | null>(null);
@@ -34,7 +37,16 @@ const Tvl = () => {
 
   return (
     <div>
-      <p>Total Value Locked (TVL): {tvl?.toString() || 'N/A'} USDC</p>
+      <p>
+  Total Value Locked (TVL): {
+    tvl ? 
+    <ParseVaultAmount 
+      amount={BigInt(tvl.toString())} 
+      rounded={true} 
+    /> : 
+    'N/A'
+  }
+</p>
       {/* <p>Ethereum Price: {ethPrice ? `$${ethPrice.toFixed(2)}` : 'N/A'}</p> */}
     </div>
   );

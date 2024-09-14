@@ -4,6 +4,8 @@ import { getUser } from '../fetch/getUser';
 import { useAccount } from 'wagmi';
 import DepositModal from './DepositModal';
 import WithdrawModal from './WithdrawModal';
+import ParseDepositTokenAmount from '../utilities/ParseDepositTokenAmount';
+import ParseVaultAmount from '../utilities/ParseVaultAmount';
 
 const UserBalances = () => {
   const { address } = useAccount();
@@ -41,7 +43,9 @@ const UserBalances = () => {
   return (
     <div>
       <h2>User Data</h2>
-      <p>User Deposit Tokens: {userData?.UserDepositTokens.toString() || 'N/A'} USDC</p>
+      {/* <p>User Deposit Tokens: {userData?.UserDepositTokens.toString() || 'N/A'} USDC</p> */}
+      <p>User Deposit Tokens: {userData ? <ParseVaultAmount amount={BigInt(userData?.UserDepositTokens.toString())} rounded={true} /> : 'N/A'}
+</p>
       <button 
         onClick={() => setIsDepositModalOpen(true)} 
         className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"

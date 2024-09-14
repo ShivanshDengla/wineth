@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { fetchPrizes } from '../fetch/getPrizesWon';
 import { useAccount } from 'wagmi';
-import  PrizeValue  from './PrizeValue'
+// import  PrizeValue  from './PrizeValue'
+import ParsePrizeAmount from '../utilities/ParsePrizeAmount';
 
 interface PrizeClaim {
   id: string;
@@ -52,7 +53,7 @@ const PrizesWon: React.FC = () => {
       <h2>Prizes Won by {address}</h2>
       {prizeClaims.length > 0 ? (
         <div>
-          <p>Total Won: <PrizeValue amount={BigInt(totalPayout)}/></p>
+          <p>Total Won: <ParsePrizeAmount amount={BigInt(totalPayout)}/></p>
           <button
             onClick={() => setShowAllWins(!showAllWins)}
             className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
@@ -65,7 +66,7 @@ const PrizesWon: React.FC = () => {
               {prizeClaims.map((claim) => (
                 <li key={claim.id}>
                   {/* <strong>Prize Vault:</strong> {claim.prizeVault.id} |  */}
-                  <strong> Payout:</strong> <PrizeValue amount={BigInt(claim.payout)}/> | 
+                  <strong> Payout:</strong> <ParsePrizeAmount amount={BigInt(claim.payout)}/> | 
                   <strong> Timestamp:</strong> {new Date(parseInt(claim.timestamp) * 1000).toLocaleString()}
                 </li>
               ))}

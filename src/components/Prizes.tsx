@@ -1,7 +1,8 @@
 // components/Prizes.tsx
 import { useEffect, useState } from "react";
 import { getPrizes } from "../fetch/getPrizes";
-import PrizeValue from "./PrizeValue";
+// import PrizeValue from "./PrizeValue";
+import ParsePrizeAmount from "../utilities/ParsePrizeAmount";
 
 interface PrizeData {
   accountedBalance: bigint;
@@ -45,13 +46,13 @@ const Prizes = () => {
     <div>
       {data?.accountedBalance && (
         <p>
-          Prizes: <PrizeValue amount={data.accountedBalance} /> 
+          Prizes: <ParsePrizeAmount amount={data.accountedBalance} /> 
         </p>
       )}
       {data?.grandPrizeLiquidity && (
         <p>
           Grand Prize: {" "}
-          <PrizeValue amount={data?.grandPrizeLiquidity} /> 
+          <ParsePrizeAmount amount={data?.grandPrizeLiquidity} /> 
         </p>
       )}
     </div>
