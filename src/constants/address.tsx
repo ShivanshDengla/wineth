@@ -7,6 +7,8 @@ interface TokenInfo {
   }
   
   interface AddressMap {
+    CHAINNAME: string;
+    CHAINID: number;
     PRIZEPOOL: Address;
     PRIZETOKEN: TokenInfo;
     VAULT: TokenInfo;
@@ -14,6 +16,7 @@ interface TokenInfo {
     TWABREWARDS: Address;
     PRIZEPOOLSUBGRAPH: string;
     BLOCKEXPLORER: string;
+    
   }
 
 // op usdc
@@ -36,6 +39,8 @@ export const ADDRESS: AddressMap = {
   */
  // base usdc
   export const ADDRESS: AddressMap = {
+    CHAINNAME: "Base",
+    CHAINID: 8453,
     PRIZEPOOL: '0x45b2010d8a4f08b53c9fa7544c51dfd9733732cb',
     PRIZETOKEN: {
       ADDRESS: '0x4200000000000000000000000000000000000006',
