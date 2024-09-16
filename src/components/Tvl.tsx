@@ -1,10 +1,12 @@
 // components/Tvl.tsx
-import { useEffect, useState } from 'react';
-import { getTvl } from '../fetch/getTvl';
-import { getTokenPrice } from '../fetch/getTokenPrice';
+import { useEffect, useState } from "react";
+import { getTvl } from "../fetch/getTvl";
+import { getTokenPrice } from "../fetch/getTokenPrice";
 // import DisplayDepositTokenAmt from "./displayDepositTokenAmt"
-import ParseDepositTokenAmount from '../utilities/ParseDepositTokenAmount';
-import ParseVaultAmount from '../utilities/ParseVaultAmount';
+import {
+  ParseDepositTokenAmount,
+  ParseVaultAmount,
+} from "../utilities/ParseAmounts";
 
 const Tvl = () => {
   const [tvl, setTvl] = useState<bigint | null>(null);
@@ -20,7 +22,7 @@ const Tvl = () => {
         setTvl(tvlData);
 
         // Fetch Ethereum price
-        const ethPriceData = await getTokenPrice('ethereum');
+        const ethPriceData = await getTokenPrice("ethereum");
         setEthPrice(ethPriceData);
       } catch (err: any) {
         setError(`Failed to fetch data: ${err.message}`);
@@ -38,15 +40,9 @@ const Tvl = () => {
   return (
     <div>
       <p>
-  Total Value Locked (TVL): {
-    tvl ? 
-    <ParseVaultAmount 
-      amount={BigInt(tvl.toString())} 
-      rounded={true} 
-    /> : 
-    'N/A'
-  }
-</p>
+        Total Value Locked (TVL):{" "}
+        {tvl ? ParseVaultAmount(BigInt(tvl.toString()), true) : "N/A"}
+      </p>
       {/* <p>Ethereum Price: {ethPrice ? `$${ethPrice.toFixed(2)}` : 'N/A'}</p> */}
     </div>
   );

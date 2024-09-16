@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchPrizes } from "../fetch/getPrizesWon";
 import { useAccount } from "wagmi";
 // import  PrizeValue  from './PrizeValue'
-import ParsePrizeAmount from "../utilities/ParsePrizeAmount";
+import { ParsePrizeAmount } from "../utilities/ParseAmounts";
 import { ADDRESS } from "../constants/address";
 
 interface PrizeClaim {
@@ -60,7 +60,7 @@ const PrizesWon: React.FC = () => {
       {prizeClaims.length > 0 ? (
         <div>
           <p>
-            Total Won: <ParsePrizeAmount amount={BigInt(totalPayout)} />
+            Total Won: {ParsePrizeAmount(BigInt(totalPayout))}
           </p>
           <button
             onClick={() => setShowAllWins(!showAllWins)}
@@ -74,7 +74,7 @@ const PrizesWon: React.FC = () => {
                 <li key={claim.id}>
                   {/* <strong>Prize Vault:</strong> {claim.prizeVault.id} |  */}
                   <strong> Payout:</strong>{" "}
-                  <ParsePrizeAmount amount={BigInt(claim.payout)} /> |
+                  {ParsePrizeAmount(BigInt(claim.payout))} |
                   <a href={`${ADDRESS.BLOCKEXPLORER}/tx/${claim.txHash}`}>
                     <strong>Timestamp:</strong>{" "}
                     {new Date(
