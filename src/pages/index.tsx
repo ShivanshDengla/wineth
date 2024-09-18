@@ -8,6 +8,7 @@ import Prizes from '../components/Prizes';
 import UserBalances from '../components/UserBalances';
 import Rewards from '../components/Rewards';
 import PrizesWon from '../components/prizesWon';
+import Chance from '../components/Chance'
 
 const Home: NextPage = () => {
   return (
@@ -25,6 +26,7 @@ const Home: NextPage = () => {
         <UserBalances />
         <Rewards />
         <PrizesWon />
+        <Chance />
       </main>
     </div>
   );
