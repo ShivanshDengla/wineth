@@ -10,6 +10,7 @@ export const fetchPrizes = async (winnerAddress: string) => {
         id
         payout
         timestamp
+        txHash
         prizeVault {
           id
         }

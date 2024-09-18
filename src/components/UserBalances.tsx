@@ -1,11 +1,13 @@
 // components/UserBalances.tsx
-import { useEffect, useState } from 'react';
-import { getUser } from '../fetch/getUser';
-import { useAccount } from 'wagmi';
-import DepositModal from './DepositModal';
-import WithdrawModal from './WithdrawModal';
-import ParseDepositTokenAmount from '../utilities/ParseDepositTokenAmount';
-import ParseVaultAmount from '../utilities/ParseVaultAmount';
+import { useEffect, useState } from "react";
+import { getUser } from "../fetch/getUser";
+import { useAccount } from "wagmi";
+import DepositModal from "./DepositModal";
+import WithdrawModal from "./WithdrawModal";
+import {
+  ParseDepositTokenAmount,
+  ParseVaultAmount,
+} from "../utilities/ParseAmounts";
 
 const UserBalances = () => {
   const { address } = useAccount();
@@ -44,31 +46,36 @@ const UserBalances = () => {
     <div>
       <h2>User Data</h2>
       {/* <p>User Deposit Tokens: {userData?.UserDepositTokens.toString() || 'N/A'} USDC</p> */}
-      <p>User Deposit Tokens: {userData ? <ParseVaultAmount amount={BigInt(userData?.UserDepositTokens.toString())} rounded={true} /> : 'N/A'}
-</p>
-      <button 
-        onClick={() => setIsDepositModalOpen(true)} 
-        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-      >
+      <p>
+        User Deposit Tokens:{" "}
+        {userData
+          ? ParseVaultAmount(
+              BigInt(userData?.UserDepositTokens.toString()),
+              true
+            )
+          : "N/A"}
+      </p>
+      <button
+        onClick={() => setIsDepositModalOpen(true)}
+        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
         Open Deposit Modal
       </button>
-      <DepositModal 
-        isOpen={isDepositModalOpen} 
-        onClose={() => setIsDepositModalOpen(false)} 
+      <DepositModal
+        isOpen={isDepositModalOpen}
+        onClose={() => setIsDepositModalOpen(false)}
         onSuccess={fetchUserData}
       />
-      <p>User Allowance: {userData?.UserAllowance.toString() || 'N/A'} USDC</p>
-      <p>User Vault Tokens: {userData?.UserVaultTokens.toString() || 'N/A'}</p>
-      <button 
-        onClick={() => setIsWithdrawModalOpen(true)} 
+      <p>User Allowance: {userData?.UserAllowance.toString() || "N/A"} USDC</p>
+      <p>User Vault Tokens: {userData?.UserVaultTokens.toString() || "N/A"}</p>
+      <button
+        onClick={() => setIsWithdrawModalOpen(true)}
         className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
-        disabled={!userData || userData.UserVaultTokens.toString() === '0'}
-      >
+        disabled={!userData || userData.UserVaultTokens.toString() === "0"}>
         Open Withdraw Modal
       </button>
-      <WithdrawModal 
-        isOpen={isWithdrawModalOpen} 
-        onClose={() => setIsWithdrawModalOpen(false)} 
+      <WithdrawModal
+        isOpen={isWithdrawModalOpen}
+        onClose={() => setIsWithdrawModalOpen(false)}
         onSuccess={fetchUserData}
       />
     </div>

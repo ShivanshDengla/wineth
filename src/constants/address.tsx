@@ -7,12 +7,16 @@ interface TokenInfo {
   }
   
   interface AddressMap {
+    CHAINNAME: string;
+    CHAINID: number;
     PRIZEPOOL: Address;
     PRIZETOKEN: TokenInfo;
     VAULT: TokenInfo;
     USDC: Address;
     TWABREWARDS: Address;
     PRIZEPOOLSUBGRAPH: string;
+    BLOCKEXPLORER: string;
+    
   }
 
 // op usdc
@@ -35,6 +39,8 @@ export const ADDRESS: AddressMap = {
   */
  // base usdc
   export const ADDRESS: AddressMap = {
+    CHAINNAME: "Base",
+    CHAINID: 8453,
     PRIZEPOOL: '0x45b2010d8a4f08b53c9fa7544c51dfd9733732cb',
     PRIZETOKEN: {
       ADDRESS: '0x4200000000000000000000000000000000000006',
@@ -49,4 +55,5 @@ export const ADDRESS: AddressMap = {
     USDC: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
     TWABREWARDS: '0x86f0923d20810441efc593eb0f2825c6bff2dc09',
     PRIZEPOOLSUBGRAPH: "https://api.studio.thegraph.com/query/41211/pt-v5-base/version/latest",
+    BLOCKEXPLORER: "https://basescan.org"
   };

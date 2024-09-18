@@ -43,8 +43,8 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
   };
 
   const handleWithdraw = async () => {
-    if (chain?.id !== 10) {
-      setError('Please connect to the Optimism network.');
+    if (chain?.id !== ADDRESS.CHAINID) {
+      setError('Please connect to the ' + ADDRESS.CHAINNAME + ' network.');
       return;
     }
 
@@ -179,8 +179,8 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
         ) : (
           <p className="text-gray-600">Loading user data...</p>
         )}
-        {chain?.id !== 10 && (
-          <p className="text-red-500 mt-4">Please connect to the Optimism network to proceed.</p>
+        {chain?.id !== ADDRESS.CHAINID && (
+          <p className="text-red-500 mt-4">Please connect to the {ADDRESS.CHAINNAME} network to proceed.</p>
         )}
       </div>
     </Modal>

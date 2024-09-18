@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { fetchPrizes } from '../fetch/getPrizesWon';
-import { useAccount } from 'wagmi';
+import React, { useEffect, useState } from "react";
+import { fetchPrizes } from "../fetch/getPrizesWon";
+import { useAccount } from "wagmi";
 // import  PrizeValue  from './PrizeValue'
-import ParsePrizeAmount from '../utilities/ParsePrizeAmount';
+import { ParsePrizeAmount } from "../utilities/ParseAmounts";
+import { ADDRESS } from "../constants/address";
 
 interface PrizeClaim {
   id: string;
@@ -11,6 +12,7 @@ interface PrizeClaim {
   prizeVault: {
     id: string;
   };
+  txHash: string;
 }
 
 const PrizesWon: React.FC = () => {
@@ -32,7 +34,7 @@ const PrizesWon: React.FC = () => {
         const data = await fetchPrizes(address);
         setPrizeClaims(data);
       } catch (err) {
-        console.error('Error fetching prize claims:', err);
+        console.error("Error fetching prize claims:", err);
         setError(`Failed to load prize claims: ${(err as Error).message}`);
       } finally {
         setLoading(false);
@@ -42,9 +44,13 @@ const PrizesWon: React.FC = () => {
     getPrizeClaims();
   }, [address, isConnected]);
 
-  const totalPayout = prizeClaims.reduce((acc, claim) => acc + parseFloat(claim.payout) , 0);
+  const totalPayout = prizeClaims.reduce(
+    (acc, claim) => acc + parseFloat(claim.payout),
+    0
+  );
 
-  if (!isConnected) return <div>Please connect your wallet to see prize claims.</div>;
+  if (!isConnected)
+    return <div>Please connect your wallet to see prize claims.</div>;
   if (loading) return <div>Loading prize claims...</div>;
   if (error) return <div>{error}</div>;
 
@@ -53,12 +59,13 @@ const PrizesWon: React.FC = () => {
       <h2>Prizes Won by {address}</h2>
       {prizeClaims.length > 0 ? (
         <div>
-          <p>Total Won: <ParsePrizeAmount amount={BigInt(totalPayout)}/></p>
+          <p>
+            Total Won: {ParsePrizeAmount(BigInt(totalPayout))}
+          </p>
           <button
             onClick={() => setShowAllWins(!showAllWins)}
-            className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-          >
-            {showAllWins ? 'Hide Details' : 'View All Wins'}
+            className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+            {showAllWins ? "Hide Details" : "View All Wins"}
           </button>
 
           {showAllWins && (
@@ -66,8 +73,14 @@ const PrizesWon: React.FC = () => {
               {prizeClaims.map((claim) => (
                 <li key={claim.id}>
                   {/* <strong>Prize Vault:</strong> {claim.prizeVault.id} |  */}
-                  <strong> Payout:</strong> <ParsePrizeAmount amount={BigInt(claim.payout)}/> | 
-                  <strong> Timestamp:</strong> {new Date(parseInt(claim.timestamp) * 1000).toLocaleString()}
+                  <strong> Payout:</strong>{" "}
+                  {ParsePrizeAmount(BigInt(claim.payout))} |
+                  <a href={`${ADDRESS.BLOCKEXPLORER}/tx/${claim.txHash}`}>
+                    <strong>Timestamp:</strong>{" "}
+                    {new Date(
+                      parseInt(claim.timestamp) * 1000
+                    ).toLocaleString()}
+                  </a>
                 </li>
               ))}
             </ul>

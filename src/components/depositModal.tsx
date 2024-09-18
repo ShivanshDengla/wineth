@@ -57,8 +57,8 @@ const { writeContract: depositContract, data: depositHash, isPending: isDepositP
   }, [isApproveConfirmed]);
 
   const handleApproveAndDeposit = async () => {
-    if (chain?.id !== 10) {
-      setError('Please connect to the Optimism network.');
+    if (chain?.id !== ADDRESS.CHAINID) {
+      setError('Please connect to the ' + ADDRESS.CHAINNAME + ' network.');
       return;
     }
 
@@ -184,7 +184,7 @@ const { writeContract: depositContract, data: depositHash, isPending: isDepositP
         {depositHash && <div>Deposit Transaction Hash: {depositHash}</div>}
         {isDepositLoading && <div>Waiting for deposit confirmation...</div>}
         {isDepositConfirmed && <div>Deposit confirmed.</div>}
-        {chain?.id !== 10 && <p className="error">Please connect to the Optimism network to proceed.</p>}
+        {chain?.id !== ADDRESS.CHAINID && <p className="error">Please connect to the {ADDRESS.CHAINNAME} network to proceed.</p>}
       </div>
     </Modal>
   );
