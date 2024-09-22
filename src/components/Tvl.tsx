@@ -38,7 +38,7 @@ const Tvl = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
+    <div className="tvlContainer">
       <p>
         Total Value Locked (TVL):{" "}
         {tvl ? ParseVaultAmount(BigInt(tvl.toString()), true) : "N/A"}
