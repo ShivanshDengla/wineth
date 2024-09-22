@@ -2,7 +2,6 @@ import { CONTRACTS } from "../constants/contracts";
 import { ADDRESS } from "../constants/address";
 import { PROVIDER } from "../wagmi"; // Assuming this is where your provider is defined
 import { Address } from "viem";
-import { ABI } from "../constants/abi";
 
 interface UserBalanceTotalSupplyTwab {
   twab: bigint;

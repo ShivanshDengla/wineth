@@ -8,6 +8,7 @@ interface TokenInfo {
   
   interface AddressMap {
     CHAINNAME: string;
+    RPCURL: string;
     CHAINID: number;
     PRIZEPOOL: Address;
     PRIZETOKEN: TokenInfo;
@@ -41,6 +42,8 @@ export const ADDRESS: AddressMap = {
   export const ADDRESS: AddressMap = {
     CHAINNAME: "Base",
     CHAINID: 8453,
+    RPCURL: process.env.NEXT_PUBLIC_GROVE_KEY ? `https://base-mainnet.rpc.grove.city/v1/${process.env.NEXT_PUBLIC_GROVE_KEY}` : 
+    `https://base-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`,
     PRIZEPOOL: '0x45b2010d8a4f08b53c9fa7544c51dfd9733732cb',
     PRIZETOKEN: {
       ADDRESS: '0x4200000000000000000000000000000000000006',
