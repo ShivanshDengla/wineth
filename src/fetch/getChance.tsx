@@ -41,7 +41,7 @@ export const GetChance = async (pooler: Address): Promise<ChanceResult | null> =
   // Define the prize pool contract
   const prizePoolContract = {
     address: ADDRESS.PRIZEPOOL,
-    abi: ABI.PRIZEPOOL, // Make sure your ABI is defined here
+    abi: CONTRACTS.PRIZEPOOL.abi, // Make sure your ABI is defined here
   } as const;
 
   try {
