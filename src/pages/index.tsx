@@ -13,14 +13,14 @@ import Image from 'next/image';
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <div className="container mx-auto">
       <Head>
         <title>Prize Pool Contract</title>
         <meta content="Prize Pool Contract Information" name="description" />
         <link href="/favicon.ico" rel="icon" />
       </Head>
 
-      <main className="flex flex-col items-center justify-center h-full">
+      <main className="flex flex-col items-center justify-center h-full pt-20 md:pt-5">
       <div className="absolute top-5 left-5">
           <Image
             src="/images/logo.svg"
@@ -32,7 +32,7 @@ const Home: NextPage = () => {
         <div className="absolute top-5 right-5">
           <ConnectButton showBalance={false} />
         </div>
-        <div className="flex items-center justify-center gap-10 mt-8 w-full">
+        <div className="flex flex-col items-center gap-2 md:flex-row md:gap-4 md:justify-between">
           <Prizes />
           <Rewards />
         </div>

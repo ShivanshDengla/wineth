@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getPrizes } from "../fetch/getPrizes";
 // import PrizeValue from "./PrizeValue";
 import { ParsePrizeAmount } from "../utilities/ParseAmounts";
+import PrizeTokenIcon from './PrizeTokenIcon';
 
 interface PrizeData {
   accountedBalance: bigint;
@@ -44,15 +45,8 @@ const Prizes = () => {
 
   return (
     <div className="flex justify-center mt-10">
-      <div
-        className="text-white text-lg py-3 px-6 rounded-lg shadow-lg"
-        style={{
-          backgroundColor: '#28447A', 
-          borderColor: '#C0ECFF', 
-          borderWidth: '2px', 
-          borderStyle: 'solid',
-        }}
-      >
+      <div className="bg-[#28447A] border-2 border-[#C0ECFF] rounded-lg p-4 flex items-center gap-2">
+      <PrizeTokenIcon size={24} />
         <p>{ParsePrizeAmount(data?.accountedBalance)} in prizes</p>
       </div>
     </div>
