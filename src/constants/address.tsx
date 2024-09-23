@@ -50,7 +50,8 @@ export const ADDRESS: AddressMap = {
       ADDRESS: '0x4200000000000000000000000000000000000006',
       SYMBOL: 'WETH',
       DECIMALS: 18,
-      ICON: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png',
+      // ICON: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png',
+      ICON: '/images/eth.jpg'
     },
     VAULT: {
       ADDRESS: '0x7f5c2b379b88499ac2b997db583f8079503f25b9',
