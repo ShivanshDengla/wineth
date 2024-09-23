@@ -43,17 +43,18 @@ const Prizes = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
-      {data?.accountedBalance && (
-        <p>
-          Prizes: {ParsePrizeAmount(data.accountedBalance)}
-        </p>
-      )}
-      {data?.grandPrizeLiquidity && (
-        <p>
-          Grand Prize: {ParsePrizeAmount(data?.grandPrizeLiquidity)} 
-        </p>
-      )}
+    <div className="flex justify-center mt-10">
+      <div
+        className="text-white text-lg py-3 px-6 rounded-lg shadow-lg"
+        style={{
+          backgroundColor: '#28447A', 
+          borderColor: '#C0ECFF', 
+          borderWidth: '2px', 
+          borderStyle: 'solid',
+        }}
+      >
+        <p>{ParsePrizeAmount(data?.accountedBalance)} in prizes</p>
+      </div>
     </div>
   );
 };

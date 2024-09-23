@@ -35,10 +35,10 @@ const Rewards: React.FC = () => {
 
   return (
     <div>
-      <h1>Rewards Overview</h1>
+      {/* <h1>Rewards Overview</h1> */}
       <RewardsApr promotionData={promotionData} />
-      <RewardsUser completedEpochs={promotionData.flatMap(p => p.completedEpochs)} promotionData={promotionData} userRewards={userRewards} />
-      <ClaimComponent promotionData={promotionData} rewardAmounts={userRewards} />
+      {/* <RewardsUser completedEpochs={promotionData.flatMap(p => p.completedEpochs)} promotionData={promotionData} userRewards={userRewards} />
+      <ClaimComponent promotionData={promotionData} rewardAmounts={userRewards} /> */}
     </div>
   );
 };

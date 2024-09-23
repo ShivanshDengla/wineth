@@ -38,9 +38,9 @@ const Tvl = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="tvlContainer">
+    <div className="fixed bottom-5 left-5 text-white p-3 rounded-lg text-lg z-10">
       <p>
-        Total Value Locked (TVL):{" "}
+        TVL ${""}
         {tvl ? ParseVaultAmount(BigInt(tvl.toString()), true) : "N/A"}
       </p>
       {/* <p>Ethereum Price: {ethPrice ? `$${ethPrice.toFixed(2)}` : 'N/A'}</p> */}
