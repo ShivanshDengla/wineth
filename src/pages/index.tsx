@@ -10,6 +10,7 @@ import Rewards from '../components/Rewards';
 import PrizesWon from '../components/PrizesWon';
 import Chance from '../components/Chance'
 import Image from 'next/image';
+import {MyConnect} from '../components/ConnectButton';
 
 const Home: NextPage = () => {
   return (
@@ -30,9 +31,10 @@ const Home: NextPage = () => {
           />
         </div>
         <div className="absolute top-5 right-5">
-          <ConnectButton showBalance={false} />
+          {/* <ConnectButton showBalance={false} /> */}
+          <MyConnect connectText="CONNECT" />
         </div>
-        <div className="flex flex-col items-center gap-2 md:flex-row md:gap-4 md:justify-between">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-14 w-full md:w-auto">
           <Prizes />
           <Rewards />
         </div>
