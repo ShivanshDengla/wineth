@@ -24,8 +24,8 @@ const Home: NextPage = () => {
       <div className="absolute top-5 left-5">
           <Image
             src="/images/logo.svg"
-            height={90}
-            width={90}
+            height={70}
+            width={70}
             alt="Win Win"
           />
         </div>
