@@ -31,6 +31,8 @@ export const getTokenPrice = async (tokenId: string): Promise<number> => {
 
     return price;
   } catch (error) {
-    throw new Error(`Failed to fetch price for ${tokenId}`);
+    console.log(error);
+    return 0
+    // throw new Error(`Failed to fetch price for ${tokenId}`);
   }
 };

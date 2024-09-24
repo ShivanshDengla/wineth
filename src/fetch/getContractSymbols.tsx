@@ -2,7 +2,7 @@ import { CONTRACTS } from '../constants/contracts';
 
 export const getContractSymbols = async () => {
   try {
-    const vaultName = await CONTRACTS.USDCVAULT.read.name();
+    const vaultName = await CONTRACTS.VAULT.read.name();
     console.log("Vault Name:", vaultName); // Add this log
     return {
       vaultName,

@@ -82,8 +82,8 @@ const RewardsApr: React.FC<RewardsAprProps> = ({ promotionData }) => {
     //     <p>No active promotions</p>
     //   )}
     // </div>
-    <div className="flex justify-center mt-10">
-      <div
+    <>
+      {/* <div
         className="flex items-center py-3 px-6 rounded-lg shadow-lg"
         style={{
           backgroundColor: '#28447A', // Background color
@@ -91,32 +91,41 @@ const RewardsApr: React.FC<RewardsAprProps> = ({ promotionData }) => {
           borderWidth: '2px', // Border thickness
           borderStyle: 'solid', // Solid border
         }}
-      >
+      > */}
         {promotionData.length > 0 && promotionData.map((promo, index) => {
           // Find corresponding REWARDS object by PROMOTION
           const rewardInfo = REWARDS.find(reward => reward.PROMOTION === promo.PROMOTION);
 
           return (
-            <div key={index} className="flex items-center space-x-2">
-              {/* APR Value */}
-              <p className="text-white text-lg">
-                +{formatNumber(promo.aprValue ? promo.aprValue * 100 : undefined)}% 
-              </p>
-              {/* OP Logo */}
-              {rewardInfo?.IMAGE && (
-                <Image
-                  src={rewardInfo.IMAGE} // Ensure you have the correct path for the OP logo
-                  alt={`${rewardInfo.SYMBOL} Logo`}
-                  width={20} // Width of the logo
-                  height={20} // Height of the logo
-                />
-              )}
-              <p className="text-white text-lg">Rewards</p>
-            </div>
+         
+            <div className="flex items-center py-4 px-6 rounded-lg shadow-lg text-white text-lg sm:text-base md:text-lg w-full md:w-auto flex-1 bg-[#28447A] border-2 border-[#C0ECFF]">
+            {promotionData.length > 0 && promotionData.map((promo, index) => {
+              // Find corresponding REWARDS object by PROMOTION
+              const rewardInfo = REWARDS.find(reward => reward.PROMOTION === promo.PROMOTION);
+        
+              return (
+                <div key={index} className="flex items-center gap-2">
+                  {/* APR Value */}
+                  <p>+{formatNumber(promo.aprValue ? promo.aprValue * 100 : undefined)}%</p>
+        
+                  {/* OP Logo */}
+                  {rewardInfo?.IMAGE && (
+                    <Image
+                      src={rewardInfo.IMAGE} // Ensure you have the correct path for the OP logo
+                      alt={`${rewardInfo.SYMBOL} Logo`}
+                      width={20} // Width of the logo
+                      height={20} // Height of the logo
+                    />
+                  )}
+                  <p>Rewards</p>
+                </div>
+              );
+            })}
+          </div>
+      
           );
         })}
-      </div>
-    </div>
+      </>
   );
 };
 
