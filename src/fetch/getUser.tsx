@@ -4,7 +4,7 @@ import { ADDRESS } from '../constants/address';
 
 export const getUser = async (userAddress: string) => {
   const usdcContract = {
-    address: ADDRESS.USDC,
+    address: ADDRESS.DEPOSITTOKEN.ADDRESS,
     abi: ABI.USDC,
   } as const;
 
@@ -37,6 +37,8 @@ export const getUser = async (userAddress: string) => {
     const userDepositTokens = results[0].result as bigint;
     const userAllowance = results[1].result as bigint;
     const userVaultTokens = results[2].result as bigint;
+console.log("user deposit tokens", userDepositTokens.toString());
+console.log("user address", userAddress);
 
     return {
       UserDepositTokens: userDepositTokens,

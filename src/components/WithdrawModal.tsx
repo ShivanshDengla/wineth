@@ -4,7 +4,7 @@ import { getUser } from '../fetch/getUser';
 import { ADDRESS } from '../constants/address';
 import { ABI } from '../constants/abi';
 import Modal from './Modal';
-import { parseUnits } from 'viem';
+import { parseUnits, formatUnits } from 'viem';
 
 interface WithdrawModalProps {
   isOpen: boolean;
@@ -153,31 +153,45 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="withdraw-modal p-6 bg-white rounded-lg shadow-xl">
-        <h2 className="text-2xl font-bold mb-4">Withdraw USDC</h2>
+      <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Withdraw USDC</h2>
         {userBalances ? (
           <>
+            <div className="mb-4 flex items-center justify-between">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Your vault balance:</span>
+              <div className="flex items-center">
+                <img src={ADDRESS.VAULT.ICON} alt="Vault Token" className="w-5 h-5 mr-2" />
+                <span className="text-lg font-semibold text-gray-900 dark:text-white">
+                  {formatUnits(userBalances.UserVaultTokens, ADDRESS.VAULT.DECIMALS)}
+                </span>
+              </div>
+            </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Amount:</label>
-              <input
-                type="text"
-                className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={amount}
-                onChange={handleAmountChange}
-                disabled={isProcessing}
-              />
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Amount:</label>
+              <div className="mt-1 relative rounded-md shadow-sm">
+                <input
+                  type="text"
+                  className="block w-full pr-10 sm:text-sm rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white border-gray-300"
+                  value={amount}
+                  onChange={handleAmountChange}
+                  disabled={isProcessing}
+                />
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  <span className="text-gray-500 sm:text-sm">USDC</span>
+                </div>
+              </div>
               {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
             </div>
             <button
-              className="w-full bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700 transition duration-300 disabled:opacity-50"
+              className="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded hover:bg-indigo-700 cursor-pointer transition duration-300 disabled:opacity-50 dark:bg-indigo-500 dark:hover:bg-indigo-600"
               onClick={handleWithdraw}
-              disabled={!!error || isProcessing || !amount || chain?.id !== 10}
+              disabled={!!error || isProcessing || !amount || chain?.id !== ADDRESS.CHAINID}
             >
               {isProcessing ? 'Processing...' : 'Withdraw'}
             </button>
           </>
         ) : (
-          <p className="text-gray-600">Loading user data...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading user data...</p>
         )}
         {chain?.id !== ADDRESS.CHAINID && (
           <p className="text-red-500 mt-4">Please connect to the {ADDRESS.CHAINNAME} network to proceed.</p>
