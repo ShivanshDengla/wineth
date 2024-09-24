@@ -15,13 +15,13 @@ export const CONTRACTS = {
     abi: ABI.WETHPRIZE,
     client: PROVIDER,
   }),
-  USDCVAULT: getContract({
+  VAULT: getContract({
     address: ADDRESS.VAULT.ADDRESS,
     abi: ABI.USDCVAULT,
     client: PROVIDER,
   }),
-  USDC: getContract({
-    address: ADDRESS.USDC,
+  DEPOSITTOKEN: getContract({
+    address: ADDRESS.DEPOSITTOKEN.ADDRESS,
     abi: ABI.USDC,
     client: PROVIDER,
   }),

@@ -13,6 +13,7 @@ interface TokenInfo {
     CHAINID: number;
     PRIZEPOOL: Address;
     PRIZETOKEN: TokenInfo;
+    DEPOSITTOKEN: TokenInfo;
     VAULT: TokenInfo;
     USDC: Address;
     TWABREWARDS: Address;
@@ -55,10 +56,16 @@ export const ADDRESS: AddressMap = {
     },
     VAULT: {
       ADDRESS: '0x7f5c2b379b88499ac2b997db583f8079503f25b9',
-      SYMBOL: 'USDC',
+      SYMBOL: 'przUSDC',
       DECIMALS: 6,
       ICON: 'https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png?1547042389',
     },
+    DEPOSITTOKEN: {
+      ADDRESS: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+      SYMBOL: 'USDC',
+      DECIMALS: 6,
+      ICON: 'https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png?1547042389',
+    },    
     USDC: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
     TWABREWARDS: '0x86f0923d20810441efc593eb0f2825c6bff2dc09',
     PRIZEPOOLSUBGRAPH: "https://api.studio.thegraph.com/query/41211/pt-v5-base/version/latest",

@@ -5,12 +5,12 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import Tvl from '../components/Tvl';
 import Prizes from '../components/Prizes';
-import UserBalances from '../components/UserBalances';
+import UserBalancesAndChance from '../components/UserBalancesAndChance';
 import Rewards from '../components/Rewards';
 import PrizesWon from '../components/PrizesWon';
 import Chance from '../components/Chance'
 import Image from 'next/image';
-import {MyConnect} from '../components/ConnectButton';
+import { MyConnect} from '../components/ConnectButton';
 
 const Home: NextPage = () => {
   return (
@@ -34,12 +34,13 @@ const Home: NextPage = () => {
           {/* <ConnectButton showBalance={false} /> */}
           <MyConnect connectText="CONNECT" />
         </div>
-        <div className="flex flex-col md:flex-row justify-center items-center gap-14 w-full md:w-auto">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-14 w-full md:w-auto mt-16">
           <Prizes />
           <Rewards />
         </div>
         <Tvl />
-        {/* <UserBalances /> 
+        <UserBalancesAndChance /> 
+        {/*
         <PrizesWon />
         <Chance /> */}
       </main>

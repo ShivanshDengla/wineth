@@ -38,7 +38,7 @@ const Tvl = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="fixed bottom-5 left-5 text-white p-3 rounded-lg text-lg z-10">
+    <div className="fixed bottom-1 left-1 text-white p-3 rounded-lg text-small z-10">
       <p>
         TVL ${""}
         {tvl ? ParseVaultAmount(tvl, true) : "N/A"}
