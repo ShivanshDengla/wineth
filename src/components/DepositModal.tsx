@@ -24,6 +24,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log("use effect triggered");
     if (address) {
       getUserData();
     }
@@ -31,7 +32,9 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
 
   const getUserData = async () => {
     try {
+      console.log("getUserData triggered",address);
       const data = await getUser(address as string);
+      console.log("user data", data);
       setUserBalances(data);
     } catch (err) {
       setError('Failed to fetch user data.');
@@ -137,9 +140,18 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const buttonLabel = userBalances && parseFloat(amount) > 0 && BigInt(Math.floor(parseFloat(amount) * 10 ** 6)) > userBalances.UserAllowance
-    ? 'Approve'
-    : 'Deposit';
+  const getButtonLabel = () => {
+    if (isApprovePending || isApproveLoading) {
+      return "APPROVING...";
+    }
+    if (isDepositPending || isDepositLoading) {
+      return "DEPOSITING...";
+    }
+    if (userBalances && parseFloat(amount) > 0 && BigInt(Math.floor(parseFloat(amount) * 10 ** 6)) > userBalances.UserAllowance) {
+      return "Approve";
+    }
+    return "Deposit";
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -151,20 +163,19 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
             <div className="flex flex-col space-y-4">
               {/* Display Current Balances */}
               <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  
-                  {/* <p>Your Vault Tokens: {userBalances.UserVaultTokens.toString()} {ADDRESS.VAULT.SYMBOL}</p> */}
-                  <p>
-                    You have <Image
+                <p className="flex items-center">
+                  You have 
+                  <Image
                     src={ADDRESS.DEPOSITTOKEN.ICON}
                     alt={`${ADDRESS.DEPOSITTOKEN.SYMBOL} Icon`}
                     width={24}
                     height={24}
-                    className="mr-2 ml-1"
+                    className="mx-2"
                   />
-                    {Number(userBalances.UserDepositTokens)/Math.pow(ADDRESS.DEPOSITTOKEN.DECIMALS,10)} {ADDRESS.DEPOSITTOKEN.SYMBOL} to deposit
-                  </p>
-                </div>
+                  <span className="whitespace-nowrap">
+                    {Number(userBalances.UserDepositTokens) / 10 ** ADDRESS.DEPOSITTOKEN.DECIMALS} {ADDRESS.DEPOSITTOKEN.SYMBOL}
+                  </span>
+                </p>
               </div>
               
 
@@ -185,9 +196,9 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
               <button
                 className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-all cursor-pointer"
                 onClick={handleApproveAndDeposit}
-                disabled={!!error || isProcessing || !amount || isApproveLoading || isDepositPending || chain?.id !== ADDRESS.CHAINID}
+                disabled={!!error || isProcessing || !amount || isApproveLoading || isDepositPending || isApprovePending || isDepositLoading || chain?.id !== ADDRESS.CHAINID}
               >
-                {isProcessing ? 'Processing...' : buttonLabel}
+                {getButtonLabel()}
               </button>
             </div>
           </>
