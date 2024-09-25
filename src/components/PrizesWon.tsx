@@ -51,7 +51,10 @@ const PrizesWon: React.FC = () => {
 
   if (!isConnected)
     return <div>Please connect your wallet to see prize claims.</div>;
-  if (loading) return <div>Loading prize claims...</div>;
+  if (loading) return 
+  <div>
+    {/* Loading prize claims... */}
+  </div>;
   if (error) return <div>{error}</div>;
 
   return (

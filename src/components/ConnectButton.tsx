@@ -80,8 +80,8 @@ export const MyConnect: React.FC<ConnectProps> = ({ connectText }) => {
                         <div
                           style={{
                             background: chain.iconBackground,
-                            width: 19,
-                            height: 19,
+                            width: 14,
+                            height: 14,
                             borderRadius: 999,
                             overflow: "hidden",
                             marginRight: 4,
