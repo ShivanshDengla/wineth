@@ -2,17 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  background: url('/images/bg.svg') no-repeat center center fixed;
-  background-size: cover;
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  font-size: 19px;
-  color: white;
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Inter:wght@500&display=swap');
+
+@layer base {
+  html {
+    @apply font-roboto-mono text-xl font-normal leading-[26.38px] text-center text-white;
+  }
 }
+
+body {
+  @apply bg-[url('/images/bg.svg')] bg-no-repeat bg-center bg-fixed bg-cover p-0 m-0;
+}
+
 a {
   color: inherit;
   text-decoration: none;

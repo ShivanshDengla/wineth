@@ -1,4 +1,3 @@
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -10,7 +9,19 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'roboto-mono': ['"Roboto Mono"', 'monospace'],
+        'inter': ['Inter', 'sans-serif'],
+      },
+      fontSize: {
+        'xl': '20px',
+      },
+      lineHeight: {
+        'custom': '26.38px',
+        'inter': '24.2px',
+      },
+    },
   },
   plugins: [],
 }
