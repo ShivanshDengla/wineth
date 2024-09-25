@@ -59,9 +59,12 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
 
     try {
       const amountInWei = parseUnits(amount, ADDRESS.VAULT.DECIMALS);
+      if (!publicClient) {
+        throw new Error("Public client is not initialized");
+      }
       const { request } = await publicClient.simulateContract({
         address: ADDRESS.VAULT.ADDRESS,
-        abi: ABI.VAULT,
+        abi: ABI.USDCVAULT,
         functionName: 'withdraw',
         args: [amountInWei, address, address],
         account: address,
@@ -98,7 +101,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
 
   const handleMaxClick = () => {
     if (userBalances?.UserVaultTokens) {
-      setAmount(formatUnits(userBalances.UserVaultTokens, ADDRESS.VAU.DECIMALS));
+      setAmount(formatUnits(userBalances.UserVaultTokens, ADDRESS.VAULT.DECIMALS));
     }
   };
 
