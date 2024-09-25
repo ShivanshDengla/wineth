@@ -44,8 +44,14 @@ const UserBalances = () => {
   }, [address]);
 
   if (!address) return <div>Please connect your wallet to see user data.</div>;
-  if (loading) return <div>Loading User Data...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return 
+  <div>
+    {/* Loading User Data... */}
+    </div>;
+  if (error) return 
+  <div>
+    {/* Error: {error} */}
+    </div>;
 
   const hasDepositTokens = userData?.UserDepositTokens && userData.UserDepositTokens > BigInt(0);
   const hasVaultTokens = userData?.UserVaultTokens && userData.UserVaultTokens > BigInt(0);

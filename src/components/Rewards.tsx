@@ -30,7 +30,10 @@ const Rewards: React.FC = () => {
     fetchData();
   }, [address]);
 
-  if (loading) return <div>Loading Rewards Data...</div>;
+  if (loading) return 
+  <div>
+    {/* Loading Rewards Data... */}
+    </div>;
   if (error) return <div>Error: {error}</div>;
 
   return (

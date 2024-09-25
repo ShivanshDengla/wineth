@@ -34,8 +34,13 @@ const Tvl = () => {
     fetchData();
   }, []);
 
-  if (loading) return <div>Loading data...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <div>
+    {/* Loading data... */}
+    </div>;
+  if (error) return 
+  <div>
+      {/* Error: {error} */}
+  </div>;
 
   return (
     <div className="fixed bottom-1 left-1 text-white p-3 rounded-lg text-small z-10">

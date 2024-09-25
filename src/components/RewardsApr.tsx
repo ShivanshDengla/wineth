@@ -83,38 +83,24 @@ const RewardsApr: React.FC<RewardsAprProps> = ({ promotionData }) => {
     //   )}
     // </div>
     <>
-      {/* <div
-        className="flex items-center py-3 px-6 rounded-lg shadow-lg"
-        style={{
-          backgroundColor: '#28447A', // Background color
-          borderColor: '#C0ECFF', // Border color
-          borderWidth: '2px', // Border thickness
-          borderStyle: 'solid', // Solid border
-        }}
-      > */}
-        {promotionData.length > 0 && promotionData.map((promo, index) => {
-          // Find corresponding REWARDS object by PROMOTION
-          const rewardInfo = REWARDS.find(reward => reward.PROMOTION === promo.PROMOTION);
+      {promotionData.length > 0 && promotionData.map((promo, index) => {
+        const rewardInfo = REWARDS.find(reward => reward.PROMOTION === promo.PROMOTION);
 
-          return (
-         
-            <div className="flex items-center py-4 px-6 rounded-lg shadow-lg text-white text-lg sm:text-base md:text-lg w-full md:w-auto flex-1 bg-[#28447A] border-2 border-[#C0ECFF]">
+        return (
+          <div className="flex items-center justify-center bg-[#28447A] border-2 border-[#C0ECFF] rounded-lg p-4 text-white text-lg sm:text-base md:text-lg w-[340px] h-[60px]">
             {promotionData.length > 0 && promotionData.map((promo, index) => {
-              // Find corresponding REWARDS object by PROMOTION
               const rewardInfo = REWARDS.find(reward => reward.PROMOTION === promo.PROMOTION);
-        
+      
               return (
                 <div key={index} className="flex items-center gap-2">
-                  {/* APR Value */}
                   <p>+{formatNumber(promo.aprValue ? promo.aprValue * 100 : undefined)}%</p>
-        
-                  {/* OP Logo */}
+      
                   {rewardInfo?.IMAGE && (
                     <Image
-                      src={rewardInfo.IMAGE} // Ensure you have the correct path for the OP logo
+                      src={rewardInfo.IMAGE}
                       alt={`${rewardInfo.SYMBOL} Logo`}
-                      width={20} // Width of the logo
-                      height={20} // Height of the logo
+                      width={20}
+                      height={20}
                     />
                   )}
                   <p>Rewards</p>
@@ -122,10 +108,9 @@ const RewardsApr: React.FC<RewardsAprProps> = ({ promotionData }) => {
               );
             })}
           </div>
-      
-          );
-        })}
-      </>
+        );
+      })}
+    </>
   );
 };
 

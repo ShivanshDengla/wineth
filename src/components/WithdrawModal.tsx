@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
+import { useAccount, usePublicClient, useWalletClient, useSwitchChain } from 'wagmi';
 import { getUser } from '../fetch/getUser';
 import { ADDRESS } from '../constants/address';
 import { ABI } from '../constants/abi';
 import Modal from './Modal';
 import { parseUnits, formatUnits } from 'viem';
+import Image from 'next/image';
 
 interface WithdrawModalProps {
   isOpen: boolean;
@@ -16,6 +17,8 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
   const { address, chain } = useAccount();
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
+  const { switchChain } = useSwitchChain();
+
   const [amount, setAmount] = useState<string>('');
   const [userBalances, setUserBalances] = useState<{
     UserDepositTokens: bigint;
@@ -24,12 +27,17 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
   } | null>(null);
   const [error, setError] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [withdrawHash, setWithdrawHash] = useState<string | null>(null);
+  const [isWithdrawPending, setIsWithdrawPending] = useState<boolean>(false);
+  const [isWithdrawLoading, setIsWithdrawLoading] = useState<boolean>(false);
+  const [isWithdrawConfirmed, setIsWithdrawConfirmed] = useState<boolean>(false);
+  const [isSwitchingChain, setIsSwitchingChain] = useState<boolean>(false);
 
   useEffect(() => {
-    if (address) {
+    if (address && chain?.id === ADDRESS.CHAINID) {
       getUserData();
     }
-  }, [address]);
+  }, [address, chain]);
 
   const getUserData = async () => {
     if (!address) return;
@@ -43,162 +51,156 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
   };
 
   const handleWithdraw = async () => {
-    if (chain?.id !== ADDRESS.CHAINID) {
-      setError('Please connect to the ' + ADDRESS.CHAINNAME + ' network.');
-      return;
-    }
-
-    if (!walletClient) {
-      setError('Wallet not connected.');
-      return;
-    }
-
-    if (!publicClient) {
-      setError('Public client not available.');
-      return;
-    }
-
+    if (!walletClient || !address || !amount) return;
     setIsProcessing(true);
     setError('');
-    
+    setIsWithdrawPending(true);
+    setIsWithdrawLoading(true);
+
     try {
-      const amountAsNumber = parseFloat(amount);
-
-      if (isNaN(amountAsNumber) || amountAsNumber <= 0) {
-        throw new Error('Invalid amount');
-      }
-
-      const withdrawAmount = parseUnits(amount, 6); // Assuming USDC has 6 decimals
-
-      if (userBalances && withdrawAmount > userBalances.UserVaultTokens) {
-        throw new Error('Insufficient balance in vault');
-      }
-
-      // Estimate gas
-      const gasEstimate = await publicClient.estimateContractGas({
+      const amountInWei = parseUnits(amount, ADDRESS.VAULT.DECIMALS);
+      const { request } = await publicClient.simulateContract({
         address: ADDRESS.VAULT.ADDRESS,
-        abi: ABI.USDCVAULT,
+        abi: ABI.VAULT,
         functionName: 'withdraw',
-        args: [withdrawAmount, address, address],
+        args: [amountInWei, address, address],
         account: address,
       });
 
-      // Proceed with withdrawal
-      const hash = await walletClient.writeContract({
-        address: ADDRESS.VAULT.ADDRESS,
-        abi: ABI.USDCVAULT,
-        functionName: 'withdraw',
-        args: [withdrawAmount, address, address],
-        gas: gasEstimate,
-      });
+      const hash = await walletClient.writeContract(request);
+      setWithdrawHash(hash);
+      setIsWithdrawPending(false);
 
-      console.log('Withdrawal transaction submitted:', hash);
-      
-      // Wait for transaction confirmation
-      // TODO use wait for transaction
       const receipt = await publicClient.waitForTransactionReceipt({ hash });
-      
       if (receipt.status === 'success') {
-        console.log('Withdrawal successful:', receipt);
-        await getUserData(); // Refresh user balances after withdrawal
-        onSuccess?.(); // Call onSuccess if provided
-        onClose(); // Close the modal on success
+        setIsWithdrawConfirmed(true);
+        getUserData();
+        if (onSuccess) onSuccess();
       } else {
-        throw new Error('Transaction failed');
+        setError('Withdraw failed. Please try again.');
       }
-
-    } catch (err: any) {
-      console.error('Withdrawal error:', err);
-      setError(`Failed to process the transaction: ${err.message}`);
+    } catch (err) {
+      console.error('Withdraw error:', err);
+      setError('An error occurred during withdrawal. Please try again.');
     } finally {
       setIsProcessing(false);
+      setIsWithdrawLoading(false);
     }
   };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
-
-    if (value === '') {
-      setError('');
-      setAmount('');
-      return;
-    }
-
-    if (!/^\d*\.?\d*$/.test(value)) {
-      setError('Invalid amount');
-      return;
-    }
-
-    try {
-      const amountAsNumber = parseFloat(value);
-      
-      if (isNaN(amountAsNumber)) {
-        setError('Invalid amount');
-        return;
-      }
-
-      const amountInBigInt = parseUnits(value, 6); // Assuming USDC has 6 decimals
-
-      if (userBalances && amountInBigInt > userBalances.UserVaultTokens) {
-        setError('Insufficient balance in vault');
-      } else {
-        setError('');
-      }
-
+    const value = e.target.value;
+    if (/^\d*\.?\d*$/.test(value) || value === '') {
       setAmount(value);
-    } catch (err) {
-      setError('Invalid amount');
+      setError('');
+    }
+  };
+
+  const handleMaxClick = () => {
+    if (userBalances?.UserVaultTokens) {
+      setAmount(formatUnits(userBalances.UserVaultTokens, ADDRESS.VAU.DECIMALS));
+    }
+  };
+
+  const handleSwitchChain = async () => {
+    setIsSwitchingChain(true);
+    try {
+      await switchChain({ chainId: ADDRESS.CHAINID });
+    } catch (error) {
+      console.error('Failed to switch chain:', error);
+      setError('Failed to switch network. Please try again.');
+    } finally {
+      setIsSwitchingChain(false);
     }
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
-        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Withdraw USDC</h2>
-        {userBalances ? (
-          <>
-            <div className="mb-4 flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Your vault balance:</span>
-              <div className="flex items-center">
-                <img src={ADDRESS.VAULT.ICON} alt="Vault Token" className="w-5 h-5 mr-2" />
-                <span className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {formatUnits(userBalances.UserVaultTokens, ADDRESS.VAULT.DECIMALS)}
-                </span>
-              </div>
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Amount:</label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <input
-                  type="text"
-                  className="block w-full pr-10 sm:text-sm rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white border-gray-300"
-                  value={amount}
-                  onChange={handleAmountChange}
-                  disabled={isProcessing}
-                />
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                  <span className="text-gray-500 sm:text-sm">USDC</span>
-                </div>
-              </div>
-              {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-            </div>
+      <div className="bg-[#1e2a45] p-6 rounded-lg w-full max-w-lg text-white">
+        <h2 className="text-2xl font-bold mb-4">Withdraw USDC</h2>
+
+        {chain?.id !== ADDRESS.CHAINID ? (
+          <div className="mt-4">
+            <p className="text-red-500">Please connect to the {ADDRESS.CHAINNAME} network to proceed.</p>
             <button
-              className="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded hover:bg-indigo-700 cursor-pointer transition duration-300 disabled:opacity-50 dark:bg-indigo-500 dark:hover:bg-indigo-600"
-              onClick={handleWithdraw}
-              disabled={!!error || isProcessing || !amount || chain?.id !== ADDRESS.CHAINID}
+              onClick={handleSwitchChain}
+              disabled={isSwitchingChain}
+              className="mt-2 bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isProcessing ? 'Processing...' : 'Withdraw'}
+              {isSwitchingChain ? 'Switching...' : `Switch to ${ADDRESS.CHAINNAME}`}
             </button>
+          </div>
+        ) : userBalances ? (
+          <>
+            <div className="flex flex-col space-y-4">
+              {/* Display Current Balances */}
+              <div className="flex items-center justify-between">
+                <p className="flex items-center">
+                  You have 
+                  <span className="mx-2 relative w-6 h-6">
+                    <Image
+                      src={ADDRESS.VAULT.ICON}
+                      alt={`${ADDRESS.VAULT.SYMBOL} Icon`}
+                      layout="fill"
+                      objectFit="contain"
+                    />
+                  </span>
+                  <span className="whitespace-nowrap">
+                    {formatUnits(userBalances.UserVaultTokens, ADDRESS.VAULT.DECIMALS)} {ADDRESS.VAULT.SYMBOL}
+                  </span>
+                </p>
+              </div>
+
+              {/* Input and Buttons */}
+              <div>
+                <label htmlFor="amount" className="block mb-1 text-sm">Amount:</label>
+                <div className="flex items-center">
+                  <input
+                    type="text"
+                    id="amount"
+                    className="flex-grow bg-[#2A2A5B] border border-[#C0ECFF] rounded-l-lg py-2 px-4 text-white focus:outline-none"
+                    value={amount}
+                    onChange={handleAmountChange}
+                    disabled={isProcessing || isWithdrawPending}
+                  />
+                  <button
+                    onClick={handleMaxClick}
+                    className="bg-blue-500 text-white font-bold py-2 px-4 rounded-r-lg hover:bg-blue-700 transition-all cursor-pointer"
+                    disabled={isProcessing || isWithdrawPending}
+                  >
+                    Max
+                  </button>
+                </div>
+                {error && <p className="text-red-500 mt-2">{error}</p>}
+              </div>
+
+              <button
+                className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleWithdraw}
+                disabled={!!error || isProcessing || !amount || isWithdrawPending || isWithdrawLoading}
+              >
+                {isWithdrawPending || isWithdrawLoading ? "WITHDRAWING..." : "Withdraw"}
+              </button>
+            </div>
           </>
         ) : (
-          <p className="text-gray-600 dark:text-gray-400">Loading user data...</p>
+          <p>Loading user data...</p>
         )}
-        {chain?.id !== ADDRESS.CHAINID && (
-          <p className="text-red-500 mt-4">Please connect to the {ADDRESS.CHAINNAME} network to proceed.</p>
+        {isWithdrawLoading && (
+          <div className="mt-4">
+            Waiting for withdrawal confirmation... 
+            {withdrawHash && (
+              <a href={`${ADDRESS.BLOCKEXPLORER}/tx/${withdrawHash}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">
+                [tx]
+              </a>
+            )}
+          </div>
         )}
+        {isWithdrawConfirmed && <div className="mt-4 text-green-500">Withdrawal confirmed.</div>}
       </div>
     </Modal>
   );
 };
 
 export default WithdrawModal;
+

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from 'wagmi';
 import { getUser } from '../fetch/getUser';
 import { ADDRESS } from '../constants/address';
 import { ABI } from '../constants/abi';
@@ -22,6 +22,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
   } | null>(null);
   const [error, setError] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const { switchChain } = useSwitchChain();
 
   useEffect(() => {
     console.log("use effect triggered");
@@ -54,6 +55,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isApproveConfirmed) {
+      console.log('Approval confirmed, updating user data');
       getUserData();
     }
   }, [isApproveConfirmed]);
@@ -77,6 +79,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
       const depositAmount = BigInt(Math.floor(amountAsNumber * 10 ** 6)); // Assuming USDC has 6 decimals
 
       if (userBalances && depositAmount > userBalances.UserAllowance) {
+        console.log('Initiating approval transaction');
         // Trigger approval
         approveContract({
           address: ADDRESS.DEPOSITTOKEN.ADDRESS,
@@ -153,12 +156,39 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
     return "Deposit";
   };
 
+  const handleSwitchChain = async () => {
+    try {
+      await switchChain({ chainId: ADDRESS.CHAINID });
+    } catch (error) {
+      console.error('Failed to switch chain:', error);
+      setError('Failed to switch network. Please try manually.');
+    }
+  };
+
+  const handleMaxClick = () => {
+    if (userBalances) {
+      const maxAmount = Number(userBalances.UserDepositTokens) / 10 ** ADDRESS.DEPOSITTOKEN.DECIMALS;
+      setAmount(maxAmount.toString());
+      setError(''); // Clear any existing errors
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="bg-[#1e2a45] p-6 rounded-lg w-full max-w-lg text-white">
         <h2 className="text-2xl font-bold mb-4">Deposit USDC</h2>
 
-        {userBalances ? (
+        {chain?.id !== ADDRESS.CHAINID ? (
+          <div className="mt-4">
+            <p className="text-red-500">Please connect to the {ADDRESS.CHAINNAME} network to proceed.</p>
+            <button
+              onClick={handleSwitchChain}
+              className="mt-2 bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-all cursor-pointer"
+            >
+              Switch to {ADDRESS.CHAINNAME}
+            </button>
+          </div>
+        ) : userBalances ? (
           <>
             <div className="flex flex-col space-y-4">
               {/* Display Current Balances */}
@@ -182,35 +212,61 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
               {/* Input and Buttons */}
               <div>
                 <label htmlFor="amount" className="block mb-1 text-sm">Amount:</label>
-                <input
-                  type="text"
-                  id="amount"
-                  className="w-full bg-[#2A2A5B] border border-[#C0ECFF] rounded-lg py-2 px-4 text-white focus:outline-none"
-                  value={amount}
-                  onChange={handleAmountChange}
-                  disabled={isProcessing || isApproveLoading || isDepositPending}
-                />
+                <div className="flex items-center">
+                  <input
+                    type="text"
+                    id="amount"
+                    className="flex-grow bg-[#2A2A5B] border border-[#C0ECFF] rounded-l-lg py-2 px-4 text-white focus:outline-none"
+                    value={amount}
+                    onChange={handleAmountChange}
+                    disabled={isProcessing || isApproveLoading || isDepositPending}
+                  />
+                  <button
+                    onClick={handleMaxClick}
+                    className="bg-blue-500 text-white font-bold py-2 px-4 rounded-r-lg hover:bg-blue-700 transition-all cursor-pointer"
+                    disabled={isProcessing || isApproveLoading || isDepositPending}
+                  >
+                    Max
+                  </button>
+                </div>
                 {error && <p className="text-red-500 mt-2">{error}</p>}
               </div>
 
               <button
                 className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-all cursor-pointer"
                 onClick={handleApproveAndDeposit}
-                disabled={!!error || isProcessing || !amount || isApproveLoading || isDepositPending || isApprovePending || isDepositLoading || chain?.id !== ADDRESS.CHAINID}
+                disabled={!!error || isProcessing || !amount || isApproveLoading || isDepositPending || isApprovePending || isDepositLoading}
               >
                 {getButtonLabel()}
               </button>
             </div>
           </>
         ) : (
-          <p>Loading...</p>
+          <></>
+          // <p>Loading...</p>
         )}
         {approveHash && <div>Approve Transaction Hash: {approveHash}</div>}
-        {isApproveLoading && <div>Waiting for approval confirmation...</div>}
-        {depositHash && <div>Deposit Transaction Hash: {depositHash}</div>}
-        {isDepositLoading && <div>Waiting for deposit confirmation...</div>}
+        {isApproveLoading && (
+          <div>
+            Waiting for approval confirmation... 
+            {approveHash && (
+              <a href={`${ADDRESS.BLOCKEXPLORER}/tx/${approveHash}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">
+                [tx]
+              </a>
+            )}
+          </div>
+        )}
+        {isDepositLoading && (
+          <div>
+            Waiting for deposit confirmation... 
+            {depositHash && (
+              <a href={`${ADDRESS.BLOCKEXPLORER}/tx/${depositHash}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">
+                [tx]
+              </a>
+            )}
+          </div>
+        )}
         {isDepositConfirmed && <div>Deposit confirmed.</div>}
-        {chain?.id !== ADDRESS.CHAINID && <p className="text-red-500">Please connect to the {ADDRESS.CHAINNAME} network to proceed.</p>}
       </div>
     </Modal>
   );
