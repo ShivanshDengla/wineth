@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { useAccount, usePublicClient, useWalletClient, useSwitchChain } from 'wagmi';
+import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { formatUnits } from 'viem';
 import { getUser } from '../fetch/getUser';
 import { ADDRESS } from '../constants/address';
 import { ABI } from '../constants/abi';
 import Modal from './Modal';
-import { parseUnits, formatUnits } from 'viem';
 import Image from 'next/image';
 
 interface WithdrawModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess?: () => void;
+  onWithdrawSuccess: () => void;
 }
 
-const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSuccess }) => {
-  const { address, chain } = useAccount();
-  const publicClient = usePublicClient();
-  const { data: walletClient } = useWalletClient();
-  const { switchChain } = useSwitchChain();
+const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onWithdrawSuccess }) => {
+  const { writeContract, data: withdrawHash, isPending: isWithdrawPending } = useWriteContract();
 
+  const { isLoading: isWithdrawLoading, isSuccess: isWithdrawConfirmed } = useWaitForTransactionReceipt({
+    hash: withdrawHash,
+  });
+
+  const { address } = useAccount();
   const [amount, setAmount] = useState<string>('');
   const [userBalances, setUserBalances] = useState<{
     UserDepositTokens: bigint;
@@ -26,68 +28,47 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
     UserVaultTokens: bigint;
   } | null>(null);
   const [error, setError] = useState<string>('');
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [withdrawHash, setWithdrawHash] = useState<string | null>(null);
-  const [isWithdrawPending, setIsWithdrawPending] = useState<boolean>(false);
-  const [isWithdrawLoading, setIsWithdrawLoading] = useState<boolean>(false);
-  const [isWithdrawConfirmed, setIsWithdrawConfirmed] = useState<boolean>(false);
-  const [isSwitchingChain, setIsSwitchingChain] = useState<boolean>(false);
 
   useEffect(() => {
-    if (address && chain?.id === ADDRESS.CHAINID) {
+    if (isWithdrawConfirmed) {
+      onWithdrawSuccess();
+    }
+  }, [isWithdrawConfirmed]);
+
+  useEffect(() => {
+    if (address) {
       getUserData();
     }
-  }, [address, chain]);
+  }, [address, isWithdrawConfirmed]);
 
   const getUserData = async () => {
-    if (!address) return;
     try {
-      const data = await getUser(address);
+      const data = await getUser(address as string);
       setUserBalances(data);
     } catch (err) {
-      console.error('Failed to fetch user data:', err);
       setError('Failed to fetch user data.');
     }
   };
 
   const handleWithdraw = async () => {
-    if (!walletClient || !address || !amount) return;
-    setIsProcessing(true);
-    setError('');
-    setIsWithdrawPending(true);
-    setIsWithdrawLoading(true);
-
     try {
-      const amountInWei = parseUnits(amount, ADDRESS.VAULT.DECIMALS);
-      if (!publicClient) {
-        throw new Error("Public client is not initialized");
+      const amountAsNumber = parseFloat(amount);
+
+      if (isNaN(amountAsNumber)) {
+        setError('Invalid amount');
+        return;
       }
-      const { request } = await publicClient.simulateContract({
+
+      const withdrawAmount = BigInt(Math.floor(amountAsNumber * 10 ** 6)); // Assuming USDC has 6 decimals
+
+      writeContract({
         address: ADDRESS.VAULT.ADDRESS,
         abi: ABI.USDCVAULT,
         functionName: 'withdraw',
-        args: [amountInWei, address, address],
-        account: address,
+        args: [withdrawAmount, address, address],
       });
-
-      const hash = await walletClient.writeContract(request);
-      setWithdrawHash(hash);
-      setIsWithdrawPending(false);
-
-      const receipt = await publicClient.waitForTransactionReceipt({ hash });
-      if (receipt.status === 'success') {
-        setIsWithdrawConfirmed(true);
-        getUserData();
-        if (onSuccess) onSuccess();
-      } else {
-        setError('Withdraw failed. Please try again.');
-      }
     } catch (err) {
-      console.error('Withdraw error:', err);
-      setError('An error occurred during withdrawal. Please try again.');
-    } finally {
-      setIsProcessing(false);
-      setIsWithdrawLoading(false);
+      setError('Failed to process the transaction.');
     }
   };
 
@@ -105,32 +86,21 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
     }
   };
 
-  const handleSwitchChain = async () => {
-    setIsSwitchingChain(true);
-    try {
-      await switchChain({ chainId: ADDRESS.CHAINID });
-    } catch (error) {
-      console.error('Failed to switch chain:', error);
-      setError('Failed to switch network. Please try again.');
-    } finally {
-      setIsSwitchingChain(false);
-    }
-  };
-
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="bg-[#1e2a45] p-6 rounded-lg w-full max-w-lg text-white">
         <h2 className="text-2xl font-bold mb-4">Withdraw USDC</h2>
 
-        {chain?.id !== ADDRESS.CHAINID ? (
-          <div className="mt-4">
-            <p className="text-red-500">Please connect to the {ADDRESS.CHAINNAME} network to proceed.</p>
+        {isWithdrawConfirmed ? (
+          <div className="text-center">
+            <h2 className="mb-5">Withdrawal Successful!</h2>
+            
+            <p className="mb-4">Your tokens have been successfully withdrawn.</p>
             <button
-              onClick={handleSwitchChain}
-              disabled={isSwitchingChain}
-              className="mt-2 bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={onClose}
+              className="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-all cursor-pointer"
             >
-              {isSwitchingChain ? 'Switching...' : `Switch to ${ADDRESS.CHAINNAME}`}
+              Close
             </button>
           </div>
         ) : userBalances ? (
@@ -155,8 +125,8 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
               </div>
 
               {/* Input and Buttons */}
-              <div>
-                <label htmlFor="amount" className="block mb-1 text-sm">Amount:</label>
+              <div className="flex flex-col">
+                <label htmlFor="amount" className="block mb-2 text-sm text-left">Amount:</label>
                 <div className="flex items-center">
                   <input
                     type="text"
@@ -164,12 +134,12 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
                     className="flex-grow bg-[#2A2A5B] border border-[#C0ECFF] rounded-l-lg py-2 px-4 text-white focus:outline-none"
                     value={amount}
                     onChange={handleAmountChange}
-                    disabled={isProcessing || isWithdrawPending}
+                    disabled={isWithdrawPending || isWithdrawLoading}
                   />
                   <button
                     onClick={handleMaxClick}
                     className="bg-blue-500 text-white font-bold py-2 px-4 rounded-r-lg hover:bg-blue-700 transition-all cursor-pointer"
-                    disabled={isProcessing || isWithdrawPending}
+                    disabled={isWithdrawPending || isWithdrawLoading}
                   >
                     Max
                   </button>
@@ -178,11 +148,11 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
               </div>
 
               <button
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-all cursor-pointer"
                 onClick={handleWithdraw}
-                disabled={!!error || isProcessing || !amount || isWithdrawPending || isWithdrawLoading}
+                disabled={!!error || !amount || isWithdrawPending || isWithdrawLoading}
               >
-                {isWithdrawPending || isWithdrawLoading ? "WITHDRAWING..." : "Withdraw"}
+                {isWithdrawPending || isWithdrawLoading ? "Withdrawing..." : "Withdraw"}
               </button>
             </div>
           </>
@@ -190,7 +160,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
           <p>Loading user data...</p>
         )}
         {isWithdrawLoading && (
-          <div className="mt-4">
+          <div>
             Waiting for withdrawal confirmation... 
             {withdrawHash && (
               <a href={`${ADDRESS.BLOCKEXPLORER}/tx/${withdrawHash}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">
@@ -199,11 +169,9 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSucces
             )}
           </div>
         )}
-        {isWithdrawConfirmed && <div className="mt-4 text-green-500">Withdrawal confirmed.</div>}
       </div>
     </Modal>
   );
 };
 
 export default WithdrawModal;
-
