@@ -47,9 +47,26 @@ const UserBalancesAndChance: React.FC = () => {
 console.log(isDepositModalOpen,"isDepositModalOpen")
 console.log(isWithdrawModalOpen,"isWithdrawModalOpen")
 
-  if (!address) return <div>Please connect your wallet to see user data.</div>;
-  if (loading) return <div>Loading User Data...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (!address) return (
+    <div className="flex flex-col items-center justify-center py-8 px-6 mt-6 text-white text-lg w-full md:w-auto bg-[#28447A] border-l-4 border-r-4 border-[#C0ECFF] rounded-lg shadow-md">
+      <p className="text-xl font-semibold mb-4">Wallet Not Connected</p>
+      <p>Please connect your wallet to see user data.</p>
+    </div>
+  );
+  
+  if (loading) return (
+    <div className="flex items-center justify-center py-8 px-6 mt-6 text-white text-lg w-full md:w-auto bg-[#28447A] border-l-4 border-r-4 border-[#C0ECFF] rounded-lg shadow-md">
+      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white mr-3"></div>
+      <p>Loading User Data...</p>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="flex flex-col items-center justify-center py-8 px-6 mt-6 text-white text-lg w-full md:w-auto bg-[#28447A] border-l-4 border-r-4 border-[#C0ECFF] rounded-lg shadow-md">
+      <p className="text-xl font-semibold mb-4 text-red-400">Error</p>
+      <p>{error}</p>
+    </div>
+  );
 
   const hasDepositTokens = userData?.UserDepositTokens && userData.UserDepositTokens > BigInt(0);
   const hasVaultTokens = userData?.UserVaultTokens && userData.UserVaultTokens > BigInt(0);

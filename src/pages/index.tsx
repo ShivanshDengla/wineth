@@ -23,19 +23,20 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="flex flex-col items-center justify-center h-full pt-20 md:pt-5">
-      <div className="absolute top-5 left-5">
-          <Image
-            src="/images/logo.svg"
-            height={70}
-            width={70}
-            alt="Win Win"
-          />
+        <div className="fixed top-0 left-0 right-0 flex justify-between items-center p-5 z-10">
+          <div>
+            <Image
+              src="/images/logo.svg"
+              height={70}
+              width={70}
+              alt="Win Win"
+            />
+          </div>
+          <div>
+            <MyConnect connectText="CONNECT" />
+          </div>
         </div>
-        <div className="absolute top-5 right-5">
-          {/* <ConnectButton showBalance={false} /> */}
-          <MyConnect connectText="CONNECT" />
-        </div>
-        <div className="flex flex-col md:flex-row justify-center items-center gap-14 w-full md:w-auto mt-16">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-14 w-full md:w-auto mt-8 md:mt-16">
           <Prizes />
           <Rewards />
         </div>

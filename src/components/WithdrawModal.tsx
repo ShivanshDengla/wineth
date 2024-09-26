@@ -125,26 +125,26 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onWithdr
               </div>
 
               {/* Input and Buttons */}
-              <div className="flex flex-col">
-                <label htmlFor="amount" className="block mb-2 text-sm text-left">Amount:</label>
+              <div>
+                <label htmlFor="amount" className="block mb-1 text-sm text-left">Amount:</label>
                 <div className="flex items-center">
                   <input
                     type="text"
                     id="amount"
-                    className="flex-grow bg-[#2A2A5B] border border-[#C0ECFF] rounded-l-lg py-2 px-4 text-white focus:outline-none"
+                    className="w-full min-w-0 flex-1 bg-[#2A2A5B] border border-[#C0ECFF] rounded-l-lg py-2 px-2 sm:px-4 text-white focus:outline-none text-sm sm:text-base"
                     value={amount}
                     onChange={handleAmountChange}
                     disabled={isWithdrawPending || isWithdrawLoading}
                   />
                   <button
                     onClick={handleMaxClick}
-                    className="bg-blue-500 text-white font-bold py-2 px-4 rounded-r-lg hover:bg-blue-700 transition-all cursor-pointer"
+                    className="bg-blue-500 text-white font-bold py-2 px-2 sm:px-4 rounded-r-lg hover:bg-blue-700 transition-all cursor-pointer text-sm sm:text-base whitespace-nowrap"
                     disabled={isWithdrawPending || isWithdrawLoading}
                   >
                     Max
                   </button>
                 </div>
-                {error && <p className="text-red-500 mt-2">{error}</p>}
+                {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
               </div>
 
               <button

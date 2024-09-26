@@ -201,7 +201,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDepositS
           <div className="text-center">
             <h2 className="mb-5">Congratulations!</h2>
             <Image
-              src="/images/deposit-success.png" // Make sure to add a celebration gif to your public folder
+              src="/images/deposit-success-transparent.png" // Make sure to add a celebration gif to your public folder
               alt="Celebration"
               width={150}
               height={150}
@@ -243,20 +243,20 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDepositS
                   <input
                     type="text"
                     id="amount"
-                    className="flex-grow bg-[#2A2A5B] border border-[#C0ECFF] rounded-l-lg py-2 px-4 text-white focus:outline-none"
+                    className="w-full min-w-0 flex-1 bg-[#2A2A5B] border border-[#C0ECFF] rounded-l-lg py-2 px-2 sm:px-4 text-white focus:outline-none text-sm sm:text-base"
                     value={amount}
                     onChange={handleAmountChange}
                     disabled={isProcessing || isApproveLoading || isDepositPending}
                   />
                   <button
                     onClick={handleMaxClick}
-                    className="bg-blue-500 text-white font-bold py-2 px-4 rounded-r-lg hover:bg-blue-700 transition-all cursor-pointer"
+                    className="bg-blue-500 text-white font-bold py-2 px-2 sm:px-4 rounded-r-lg hover:bg-blue-700 transition-all cursor-pointer text-sm sm:text-base whitespace-nowrap"
                     disabled={isProcessing || isApproveLoading || isDepositPending}
                   >
                     Max
                   </button>
                 </div>
-                {error && <p className="text-red-500 mt-2">{error}</p>}
+                {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
               </div>
 
               <button
