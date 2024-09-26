@@ -11,6 +11,7 @@ import PrizesWon from '../components/PrizesWon';
 import Chance from '../components/Chance'
 import Image from 'next/image';
 import { MyConnect} from '../components/ConnectButton';
+import BigWinners from '../components/BigWinners';
 
 const Home: NextPage = () => {
   return (
@@ -43,6 +44,7 @@ const Home: NextPage = () => {
         {/*
         <PrizesWon />
         <Chance /> */}
+        <BigWinners />
       </main>
     </div>
   );

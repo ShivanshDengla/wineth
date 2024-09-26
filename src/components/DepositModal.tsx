@@ -9,10 +9,22 @@ import Image from 'next/image';
 interface DepositModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onDepositSuccess: () => void;  // New prop for handling successful deposits
 }
 
-const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
+const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDepositSuccess }) => {
+  const { writeContract: approveContract, data: approveHash, isPending: isApprovePending } = useWriteContract();
+  const { writeContract: depositContract, data: depositHash, isPending: isDepositPending } = useWriteContract();
+
+  const { isLoading: isApproveLoading, isSuccess: isApproveConfirmed } = useWaitForTransactionReceipt({
+    hash: approveHash,
+  });
+
+  const { isLoading: isDepositLoading, isSuccess: isDepositConfirmed } = useWaitForTransactionReceipt({
+    hash: depositHash,
+  });
+
+  
   const { address, chain } = useAccount();
   const [amount, setAmount] = useState<string>('');
   const [userBalances, setUserBalances] = useState<{
@@ -25,11 +37,18 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
   const { switchChain } = useSwitchChain();
 
   useEffect(() => {
+    if (isDepositConfirmed) {
+      onDepositSuccess();  // Call the onDepositSuccess callback when deposit is confirmed
+      // Keep the modal open to show the success message
+    }
+  }, [isDepositConfirmed]);
+  
+  useEffect(() => {
     console.log("use effect triggered");
     if (address) {
       getUserData();
     }
-  }, [address]);
+  }, [address, isDepositConfirmed]);
 
   const getUserData = async () => {
     try {
@@ -42,17 +61,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const { writeContract: approveContract, data: approveHash, isPending: isApprovePending } = useWriteContract();
-  const { writeContract: depositContract, data: depositHash, isPending: isDepositPending } = useWriteContract();
-
-  const { isLoading: isApproveLoading, isSuccess: isApproveConfirmed } = useWaitForTransactionReceipt({
-    hash: approveHash,
-  });
-
-  const { isLoading: isDepositLoading, isSuccess: isDepositConfirmed } = useWaitForTransactionReceipt({
-    hash: depositHash,
-  });
-
+ 
   useEffect(() => {
     if (isApproveConfirmed) {
       console.log('Approval confirmed, updating user data');
@@ -188,6 +197,25 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
               Switch to {ADDRESS.CHAINNAME}
             </button>
           </div>
+        ) : isDepositConfirmed ? (
+          <div className="text-center">
+            <h2 className="mb-5">Congratulations!</h2>
+            <Image
+              src="/images/deposit-success.png" // Make sure to add a celebration gif to your public folder
+              alt="Celebration"
+              width={150}
+              height={150}
+              className="mx-auto"
+            />
+            <br></br>
+            <p className="mb-4">You have successfully deposited your tokens and are now building your chance to win!</p>
+            <button
+              onClick={onClose}
+              className="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-all cursor-pointer"
+            >
+              Close
+            </button>
+          </div>
         ) : userBalances ? (
           <>
             <div className="flex flex-col space-y-4">
@@ -208,10 +236,9 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
                 </p>
               </div>
               
-
               {/* Input and Buttons */}
               <div>
-                <label htmlFor="amount" className="block mb-1 text-sm">Amount:</label>
+                <label htmlFor="amount" className="block mb-1 text-sm text-left">Amount:</label>
                 <div className="flex items-center">
                   <input
                     type="text"
@@ -243,9 +270,8 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
           </>
         ) : (
           <></>
-          // <p>Loading...</p>
         )}
-        {approveHash && <div>Approve Transaction Hash: {approveHash}</div>}
+        {/* {approveHash && <div>Approve Transaction Hash: {approveHash}</div>} */}
         {isApproveLoading && (
           <div>
             Waiting for approval confirmation... 
@@ -266,7 +292,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
             )}
           </div>
         )}
-        {isDepositConfirmed && <div>Deposit confirmed.</div>}
+        {/* {isDepositConfirmed && <div>Deposit confirmed.</div>} */}
       </div>
     </Modal>
   );

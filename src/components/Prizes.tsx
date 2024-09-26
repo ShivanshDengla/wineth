@@ -57,7 +57,7 @@ const Prizes = () => {
   const grandPrizeAmount = data.grandPrizeLiquidity / BigInt(2);
 
   const displayAmount = displayType === 'prizePool' ? prizePoolAmount : grandPrizeAmount;
-  const displayText = displayType === 'prizePool' ? "Prize Pool" : "Jackpot";
+  const displayText = displayType === 'prizePool' ? "Prizes" : "Jackpot";
 
   return (
     <div className="flex items-center justify-center gap-2 bg-[#28447A] border-2 border-[#C0ECFF] rounded-lg p-4 text-white text-lg sm:text-base md:text-lg w-[340px] h-[60px]">
