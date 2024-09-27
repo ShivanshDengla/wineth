@@ -2,14 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import RewardsApr from './RewardsApr';
 import RewardsUser from './RewardsUser';
-import ClaimComponent from './ClaimComponent';
+// import ClaimComponent from './RewardsClaim.tsx.WIP';
 import { useAccount } from 'wagmi';
-import { getRewards, PromotionData, Reward } from '../fetch/getRewards';
+import { getRewards, PromotionData, RewardsData } from '../fetch/getRewards';
 
 const Rewards: React.FC = () => {
   const { address } = useAccount();
   const [promotionData, setPromotionData] = useState<PromotionData[]>([]);
-  const [userRewards, setUserRewards] = useState<Reward[]>([]);
+  const [userRewards, setUserRewards] = useState<RewardsData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

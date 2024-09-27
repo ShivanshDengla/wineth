@@ -8,7 +8,7 @@ function NumberWithCommas(number: string) {
   return parts.length > 1 ? `${integerPart}.${parts[1]}` : integerPart;
 }
 
-function CropDecimals(num: string | number, compact: boolean = false): string {
+export function CropDecimals(num: string | number, compact: boolean = false): string {
   const absNum = Math.abs(Number(num));
   if (absNum === 0 || isNaN(absNum)) {
     return "0";

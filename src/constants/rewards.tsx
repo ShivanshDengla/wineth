@@ -11,7 +11,7 @@ export const REWARDS = [
       PROMOTION: 12, 
       SYMBOL: "POOL",
       IMAGE: "https://assets.coingecko.com/coins/images/14003/standard/PoolTogether.png?1696513732",
-      DECIMALS: 1e18, 
+      DECIMALS: 18, 
     },
   ];
   

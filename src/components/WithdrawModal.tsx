@@ -4,16 +4,15 @@ import { formatUnits } from 'viem';
 import { getUser } from '../fetch/getUser';
 import { ADDRESS } from '../constants/address';
 import { ABI } from '../constants/abi';
-import Modal from './Modal';
+import Modal from './ModalContainer';
 import Image from 'next/image';
 
 interface WithdrawModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onWithdrawSuccess: () => void;
 }
 
-const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onWithdrawSuccess }) => {
+const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
   const { writeContract, data: withdrawHash, isPending: isWithdrawPending } = useWriteContract();
 
   const { isLoading: isWithdrawLoading, isSuccess: isWithdrawConfirmed } = useWaitForTransactionReceipt({
@@ -29,17 +28,12 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onWithdr
   } | null>(null);
   const [error, setError] = useState<string>('');
 
-  useEffect(() => {
-    if (isWithdrawConfirmed) {
-      onWithdrawSuccess();
-    }
-  }, [isWithdrawConfirmed]);
 
   useEffect(() => {
     if (address) {
       getUserData();
     }
-  }, [address, isWithdrawConfirmed]);
+  }, [address]);
 
   const getUserData = async () => {
     try {

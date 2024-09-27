@@ -1,42 +1,19 @@
 // components/Prizes.tsx
-import { useEffect, useState } from "react";
-import { getPrizes } from "../fetch/getPrizes";
+import { useState, useEffect } from "react";
 import { ParsePrizeAmount } from "../utilities/ParseAmounts";
 import PrizeTokenIcon from './PrizeTokenIcon';
 import { ADDRESS } from "../constants/address";
+import { PrizeData } from "../fetch/getPrizes";
 
-interface PrizeData {
-  accountedBalance: bigint;
-  grandPrizeLiquidity: bigint;
-}
 
 type DisplayType = 'prizePool' | 'grandPrize';
 
-const Prizes = () => {
-  const [data, setData] = useState<PrizeData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface PrizesProps {
+  prizes: PrizeData;
+}
+
+const Prizes: React.FC<PrizesProps> = ({ prizes }) => {
   const [displayType, setDisplayType] = useState<DisplayType>('prizePool');
-
-  useEffect(() => {
-    const fetchPrizes = async () => {
-      try {
-        const prizeData = await getPrizes();
-        if (prizeData !== null) {
-          // todo typing force
-          setData(prizeData as any);
-        } else {
-          setError("Failed to fetch prize data");
-        }
-      } catch (err: any) {
-        setError(`Failed to fetch prize data: ${err.message}`);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPrizes();
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -46,15 +23,10 @@ const Prizes = () => {
     return () => clearInterval(interval);
   }, []);
 
-  if (loading) return 
-  <div>
-    {/* Loading Prizes... */}
-    </div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!data) return null;
+  if (!prizes) return null;
 
-  const prizePoolAmount = data.accountedBalance;
-  const grandPrizeAmount = data.grandPrizeLiquidity / BigInt(2);
+  const prizePoolAmount = prizes.accountedBalance;
+  const grandPrizeAmount = prizes.grandPrizeLiquidity ? prizes.grandPrizeLiquidity / BigInt(2) : null;
 
   const displayAmount = displayType === 'prizePool' ? prizePoolAmount : grandPrizeAmount;
   const displayText = displayType === 'prizePool' ? "Prizes" : "Jackpot";
@@ -63,7 +35,7 @@ const Prizes = () => {
     <div className="flex items-center justify-center gap-2 bg-[#28447A] border-2 border-[#C0ECFF] rounded-lg p-4 text-white text-lg sm:text-base md:text-lg w-[340px] h-[60px]">
       <PrizeTokenIcon size={24} />
       <p className="whitespace-nowrap overflow-hidden text-ellipsis text-center">
-        {ParsePrizeAmount(displayAmount)} {ADDRESS.PRIZETOKEN.SYMBOL} {displayText}
+        {ParsePrizeAmount(displayAmount ?? BigInt(0))} {ADDRESS.PRIZETOKEN.SYMBOL} {displayText}
       </p>
     </div>
   );

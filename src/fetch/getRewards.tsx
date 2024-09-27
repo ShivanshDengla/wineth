@@ -25,16 +25,16 @@ export interface PromotionData {
   aprValue?: number;
 }
 
-export interface Reward {
+export interface RewardsData {
   promotion: number;
   epochs: number[];
-  amounts: number[];
+  amounts: bigint[];
 }
 
-export async function getRewards(address: string | undefined): Promise<{ promotionData: PromotionData[], userRewards: Reward[] }> {
+export async function getRewards(address: string | undefined): Promise<{ promotionData: PromotionData[], userRewards: RewardsData[] }> {
   const currentTimestamp = Math.floor(Date.now() / 1000);
   const promotionDetails: PromotionData[] = [];
-  const userRewards: Reward[] = [];
+  const userRewards: RewardsData[] = [];
 
   const fetchPromotionData = async (reward: typeof REWARDS[0]): Promise<PromotionData | null> => {
     const { PROMOTION, SYMBOL, GECKO } = reward;
@@ -58,7 +58,7 @@ export async function getRewards(address: string | undefined): Promise<{ promoti
       }
 
       const tokensPerSecond = tokensPerEpoch / epochDuration;
-      const tokensPerYear = (tokensPerSecond / reward.DECIMALS) * (365 * 24 * 60 * 60);
+      const tokensPerYear = (tokensPerSecond / Math.pow(10, reward.DECIMALS)) * (365 * 24 * 60 * 60);
 
       const adjustedTvl = formatUnits(tvl, ADDRESS.VAULT.DECIMALS);
 
@@ -83,7 +83,7 @@ export async function getRewards(address: string | undefined): Promise<{ promoti
     }
   };
 
-  const fetchUserRewards = async (address: string, promotion: number, completedEpochs: number[]): Promise<Reward | null> => {
+  const fetchUserRewards = async (address: string, promotion: number, completedEpochs: number[]): Promise<RewardsData | null> => {
     try {
       const rewardArray = await CONTRACTS.TWABREWARDS.read.getRewardsAmount([
         address,
@@ -91,12 +91,10 @@ export async function getRewards(address: string | undefined): Promise<{ promoti
         completedEpochs
       ]) as bigint[];
 
-      const rewardAmounts = rewardArray.map((reward: bigint) => Number(reward) / 1e18);
-
       return {
         promotion,
         epochs: completedEpochs,
-        amounts: rewardAmounts
+        amounts: rewardArray
       };
     } catch (err) {
       console.error(`Error fetching user rewards for promotion ${promotion}:`, err);
@@ -112,7 +110,7 @@ export async function getRewards(address: string | undefined): Promise<{ promoti
       fetchUserRewards(address, promo.PROMOTION, promo.completedEpochs)
     );
     const userRewardResults = await Promise.all(userRewardPromises);
-    userRewards.push(...userRewardResults.filter((result): result is Reward => result !== null));
+    userRewards.push(...userRewardResults.filter((result): result is RewardsData => result !== null));
   }
 
   return { promotionData: promotionDetails, userRewards };
