@@ -2,7 +2,7 @@ import { PROVIDER } from '../wagmi'; // Assuming this is where your provider is 
 import { ABI } from '../constants/abi';
 import { ADDRESS } from '../constants/address';
 
-interface PrizeData {
+export interface PrizeData {
   accountedBalance: bigint | null;
   grandPrizeLiquidity: bigint | null;
 }

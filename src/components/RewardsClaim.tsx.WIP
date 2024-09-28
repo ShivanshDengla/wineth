@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAccount } from 'wagmi';
 import { CONTRACTS } from '../constants/contracts';
-import { Reward } from '../fetch/getRewards';
+import { RewardsData } from '../fetch/getRewards';
 
 interface ClaimComponentProps {
   promotionData: any[];

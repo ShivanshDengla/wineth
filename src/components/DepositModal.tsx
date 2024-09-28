@@ -3,16 +3,15 @@ import { useAccount, useWriteContract, useWaitForTransactionReceipt, useSwitchCh
 import { getUser } from '../fetch/getUser';
 import { ADDRESS } from '../constants/address';
 import { ABI } from '../constants/abi';
-import Modal from './Modal';
+import Modal from './ModalContainer';
 import Image from 'next/image';
 
 interface DepositModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onDepositSuccess: () => void;  // New prop for handling successful deposits
 }
 
-const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDepositSuccess }) => {
+const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
   const { writeContract: approveContract, data: approveHash, isPending: isApprovePending } = useWriteContract();
   const { writeContract: depositContract, data: depositHash, isPending: isDepositPending } = useWriteContract();
 
@@ -36,12 +35,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDepositS
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const { switchChain } = useSwitchChain();
 
-  useEffect(() => {
-    if (isDepositConfirmed) {
-      onDepositSuccess();  // Call the onDepositSuccess callback when deposit is confirmed
-      // Keep the modal open to show the success message
-    }
-  }, [isDepositConfirmed]);
+ 
   
   useEffect(() => {
     console.log("use effect triggered");
@@ -199,7 +193,6 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDepositS
           </div>
         ) : isDepositConfirmed ? (
           <div className="text-center">
-            <h2 className="mb-5">Congratulations!</h2>
             <Image
               src="/images/deposit-success-transparent.png" // Make sure to add a celebration gif to your public folder
               alt="Celebration"
@@ -208,7 +201,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDepositS
               className="mx-auto"
             />
             <br></br>
-            <p className="mb-4">You have successfully deposited your tokens and are now building your chance to win!</p>
+            <p className="mb-4">Congrats! You have successfully deposited your tokens and are now building your chance to win!</p>
             <button
               onClick={onClose}
               className="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-all cursor-pointer"
