@@ -55,7 +55,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
   const hasVaultTokens = userData.UserVaultTokens > BigInt(0);
 
   return (
-    <div className="flex flex-col items-start py-4 px-6 mt-6 text-white text-lg w-full md:w-auto bg-[#28447A] border-l-4 border-r-4 border-[#C0ECFF] space-y-4">
+    <div className="flex flex-col items-start py-4 px-6 mt-6 mb-20 text-white text-lg w-full md:w-auto bg-[#28447A] border-l-4 border-r-4 border-[#C0ECFF] space-y-4">
       {!hasDepositTokens && !hasVaultTokens ? (
         <p>Welcome winner! For a chance to win, you need {ADDRESS.DEPOSITTOKEN.SYMBOL} tokens.</p>
       ) : (

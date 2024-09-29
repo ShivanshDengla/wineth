@@ -23,8 +23,8 @@ const Home: NextPage = () => {
         <link href="/favicon.ico" rel="icon" />
       </Head>
 
-      <main className="flex flex-col items-center justify-center h-full pt-20 md:pt-5">
-        <div className="fixed top-0 left-0 right-0 flex justify-between items-center p-5 z-10">
+      <main className="flex flex-col items-center justify-center h-full pt-5">
+        <div className="w-full flex justify-between items-center p-5">
           <div>
             <Image
               src="/images/logo.svg"
