@@ -55,7 +55,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
   const hasVaultTokens = userData.UserVaultTokens > BigInt(0);
 
   return (
-    <div className="flex flex-col items-start py-4 px-6 mt-6 mb-20 text-white text-lg w-full md:w-auto bg-[#28447A] border-l-4 border-r-4 border-[#C0ECFF] space-y-4">
+    <div className="flex flex-col items-start py-4 px-6 mt-6 mb-20 text-white text-lg w-full md:w-auto bg-[#28447A] border-l-4 border-r-4 border-[#C0ECFF] space-y-6 sm:space-y-2">
       {!hasDepositTokens && !hasVaultTokens ? (
         <p>Welcome winner! For a chance to win, you need {ADDRESS.DEPOSITTOKEN.SYMBOL} tokens.</p>
       ) : (
@@ -75,7 +75,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
                   {ParseDepositTokenAmount(userData?.UserDepositTokens, true)} {ADDRESS.DEPOSITTOKEN.SYMBOL}
                 </span>
                 <span>you can deposit</span>
-              </p>&nbsp;
+              </p>
               <button
                 onClick={() => setIsDepositModalOpen(true)}
                 className="text-[16px] py-[2px] px-[12px] rounded-[14px] border-none bg-[#2A2A5B] text-[#FFFCFC] cursor-pointer hover:bg-[#27aee3] transition-all"
@@ -103,7 +103,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
                   {ParseVaultAmount(userData?.UserVaultTokens, true)} {ADDRESS.VAULT.SYMBOL}
                 </span>
                 <span>tickets to win</span>
-              </p>&nbsp;
+              </p>
               <button
                 onClick={() => setIsWithdrawModalOpen(true)}
                 className="text-[16px] py-[2px] px-[12px] rounded-[14px] border-none bg-[#2A2A5B] text-[#FFFCFC] cursor-pointer hover:bg-[#27aee3] transition-all"
@@ -132,7 +132,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
                   {CropDecimals(formatBigIntWithDecimals(sumBigInts(rewardsData[0].amounts), REWARDS[0].DECIMALS))} {REWARDS[0].SYMBOL}
                 </span>
                 <span>rewards to claim</span>
-              </p>&nbsp;
+              </p>
               <button
                 onClick={() => {/* Add claim function here */}}
                 className="text-[16px] py-[2px] px-[12px] rounded-[14px] border-none bg-[#2A2A5B] text-[#FFFCFC] cursor-pointer hover:bg-[#27aee3] transition-all"
