@@ -43,7 +43,7 @@ const Tvl = () => {
   </div>;
 
   return (
-    <div className="fixed bottom-11 left-1 text-white p-3 rounded-lg text-xs z-10">
+    <div className="fixed bottom-11 left-1 text-white p-3 rounded-lg text-xs z-[-1]">
       <p>
         TVL ${""}
         {tvl ? ParseVaultAmount(tvl, true) : "N/A"}
