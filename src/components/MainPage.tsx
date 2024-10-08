@@ -66,7 +66,7 @@ const MainPage: React.FC = () => {
     fetchAllData();
   }, [address]);
 
-  if (loading) return <div>Loading data...</div>;
+  // if (loading) return <div>Loading data...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
