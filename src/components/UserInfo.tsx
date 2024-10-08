@@ -19,7 +19,7 @@ interface UserData {
   UserVaultTokens: bigint;
 }
 import { CropDecimals } from "../utilities/ParseAmounts";
-
+import { MyConnect } from "./ConnectButton";
 interface UserBalancesAndChanceProps {
   rewardsData: RewardsData[] | null;
   userData: UserData | null;
@@ -61,10 +61,11 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [ref, touchesEdges] = useElementTouchesEdges();
 
+  console.log("user chance",userChance?.grandPrize.vaultPortion)
   if (!address) return (
     <div className="flex flex-col items-center justify-center py-8 px-6 mt-6 text-white text-lg w-full md:w-auto bg-[#28447A] border-l-4 border-r-4 md:border-l-[#C0ECFF] md:border-r-[#C0ECFF] border-l-transparent border-r-transparent rounded-lg shadow-md">
       <p className="text-xl font-semibold mb-4">Wallet Not Connected</p>
-      <p>Please connect your wallet to see user data.</p>
+      <p><MyConnect connectText={"CONNECT TO WIN"}/></p>
     </div>
   );
   
@@ -174,7 +175,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
           {userChance && userChance.grandPrize.userTwab > BigInt(0) && (
             <div className="mt-4">
               {(() => {
-                const chancePercentage = Number(userChance.grandPrize.userTwab) / Number(userChance.grandPrize.totalTwab) * 100;
+                const chancePercentage = Number(userChance.grandPrize.userTwab) / Number(userChance.grandPrize.totalTwab) *( Number(userChance.grandPrize.vaultPortion)/1e18) * 100;
                 const oddsOfWinning = Math.round(100 / chancePercentage);
                 return (
                   <p className="text-sm">Your odds of winning the GP are 1 in {oddsOfWinning.toLocaleString()}</p>
