@@ -18,8 +18,8 @@ const Home: NextPage = () => {
   return (
     <div className="container mx-auto">
       <Head>
-        <title>Prize Pool Contract</title>
-        <meta content="Prize Pool Contract Information" name="description" />
+        <title>winETH . org</title>
+        <meta content="everyones wins with PoolTogether" name="description" />
         <link href="/favicon.ico" rel="icon" />
       </Head>
 

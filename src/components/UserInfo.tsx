@@ -65,7 +65,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
   if (!address) return (
     <div className="flex flex-col items-center justify-center py-8 px-6 mt-6 text-white text-lg w-full md:w-auto bg-[#28447A] border-l-4 border-r-4 md:border-l-[#C0ECFF] md:border-r-[#C0ECFF] border-l-transparent border-r-transparent rounded-lg shadow-md">
       <p className="text-xl font-semibold mb-4">Wallet Not Connected</p>
-      <p><MyConnect connectText={"CONNECT TO WIN"}/></p>
+      <div><MyConnect connectText={"CONNECT TO WIN"}/></div>
     </div>
   );
   

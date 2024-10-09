@@ -2,6 +2,12 @@ import { PROVIDER } from '../wagmi'; // Assuming this is where your provider is 
 import { ABI } from '../constants/abi';
 import { ADDRESS } from '../constants/address';
 
+export interface UserData {
+  UserDepositTokens: bigint;
+  UserAllowance: bigint;
+  UserVaultTokens: bigint;
+}
+
 export const getUser = async (userAddress: string) => {
   const usdcContract = {
     address: ADDRESS.DEPOSITTOKEN.ADDRESS,
@@ -37,8 +43,8 @@ export const getUser = async (userAddress: string) => {
     const userDepositTokens = results[0].result as bigint;
     const userAllowance = results[1].result as bigint;
     const userVaultTokens = results[2].result as bigint;
-console.log("user deposit tokens", userDepositTokens.toString());
-console.log("user address", userAddress);
+// console.log("user deposit tokens", userDepositTokens.toString());
+// console.log("user address", userAddress);
 
     return {
       UserDepositTokens: userDepositTokens,
