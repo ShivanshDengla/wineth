@@ -18,8 +18,8 @@ const Home: NextPage = () => {
   return (
     <div className="container mx-auto">
       <Head>
-        <title>winETH . org</title>
-        <meta content="everyones wins with PoolTogether" name="description" />
+        <title>winEth | PoolTogether Charity Vault</title>
+        <meta content="Contribute to a good cause while saving and winning with PoolTogether" name="description" />
         <link href="/favicon.ico" rel="icon" />
       </Head>
 
@@ -27,9 +27,9 @@ const Home: NextPage = () => {
         <div className="w-full flex justify-between items-center p-2">
           <div>
             <Image
-              src="/images/logo.svg"
-              height={70}
-              width={70}
+              src="/images/trophy_white.png"
+              height={150}
+              width={150}
               alt="Win Win"
             />
           </div>
