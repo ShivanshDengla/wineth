@@ -20,14 +20,14 @@ const Home: NextPage = () => {
       <Head>
         <title>winEth | PoolTogether Charity Vault</title>
         <meta content="Contribute to a good cause while saving and winning with PoolTogether" name="description" />
-        <link href="/favicon.ico" rel="icon" />
+        <link href="/images/favicon.ico" rel="icon" />
       </Head>
 
       <main className="flex flex-col items-center justify-center h-full pt-2">
         <div className="w-full flex justify-between items-center p-2">
           <div>
             <Image
-              src="/images/trophy_white.png"
+              src="/images/wineth.png"
               height={150}
               width={150}
               alt="Win Win"
