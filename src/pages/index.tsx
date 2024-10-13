@@ -23,7 +23,7 @@ const Home: NextPage = () => {
         <link href="/images/favicon.ico" rel="icon" />
       </Head>
 
-      <main className="flex flex-col items-center justify-center h-full pt-2">
+      <main className="flex flex-col items-center justify-center h-full">
         <div className="w-full flex justify-between items-center p-2">
           <div>
             <Image
