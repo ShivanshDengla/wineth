@@ -29,7 +29,7 @@ const Home: NextPage = () => {
             <Image
               src="/images/wineth.png"
               height={0} // Keep height for aspect ratio
-              width={100} // Set width to 0 to allow auto-adjust
+              width={125} // Set width to 0 to allow auto-adjust
               alt="WinEth Logo"
               className="h-auto sm:w-[150px]" // Adjust class for height
             />
