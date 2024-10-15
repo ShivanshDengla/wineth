@@ -98,8 +98,9 @@ if (prizesResult !== null) {
       <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-14 w-full md:w-auto mt-8 md:mt-16">
         <Prizes prizes={prizes} />
         <RewardsApr promotionData={promotionData} />
+        <PrizesWon/>
       </div>
-      <PrizesWon/>
+      
       <UserInfo
         rewardsData={userRewards}
         userData={userData}
