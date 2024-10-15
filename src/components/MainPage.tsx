@@ -7,6 +7,7 @@ import Prizes from './Prizes';
 import RewardsApr from './RewardsApr';
 import UserInfo from './UserInfo';
 import { GetChance, ChanceResult } from "../fetch/getChance";
+import PrizesWon from './PrizesWon';
 
 const MainPage: React.FC = () => {
   const { address } = useAccount();
@@ -98,6 +99,7 @@ if (prizesResult !== null) {
         <Prizes prizes={prizes} />
         <RewardsApr promotionData={promotionData} />
       </div>
+      <PrizesWon/>
       <UserInfo
         rewardsData={userRewards}
         userData={userData}
