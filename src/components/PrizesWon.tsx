@@ -4,6 +4,7 @@ import { useAccount } from "wagmi";
 // import  PrizeValue  from './PrizeValue'
 import { ParsePrizeAmount } from "../utilities/ParseAmounts";
 import { ADDRESS } from "../constants/address";
+import PrizeTokenIcon from "./PrizeTokenIcon";
 
 interface PrizeClaim {
   id: string;
@@ -50,26 +51,31 @@ const PrizesWon: React.FC = () => {
   );
 
   if (!isConnected)
-    return <div>Please connect your wallet to see prize claims.</div>;
+    return <></>;
   if (loading) return 
   <div>
     {/* Loading prize claims... */}
   </div>;
-  if (error) return <div>{error}</div>;
+  if (error) return <></>;
 
   return (
     <div>
-      <h2>Prizes Won by {address}</h2>
+      
       {prizeClaims.length > 0 ? (
-        <div>
-          <p>
-            Total Won: {ParsePrizeAmount(BigInt(totalPayout))}
-          </p>
-          <button
+          <div className="flex items-center mt-6 justify-center bg-[#28447A] border-2 border-[#C0ECFF] rounded-lg p-4 text-white text-lg sm:text-base md:text-lg w-[340px] h-[60px]">
+          <>
+          <div className="font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent relative">
+            YOU WON
+            </div>
+            
+            &nbsp;<PrizeTokenIcon size={24}/>&nbsp;{ParsePrizeAmount(BigInt(totalPayout))}
+
+            </>
+          {/* <button
             onClick={() => setShowAllWins(!showAllWins)}
             className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
             {showAllWins ? "Hide Details" : "View All Wins"}
-          </button>
+          </button> */}
 
           {showAllWins && (
             <ul>
