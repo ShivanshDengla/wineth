@@ -2,7 +2,7 @@ import React from "react";
 
 const PoweredBy: React.FC = () => {
   const socialLinks = [
-    { name: "Twitter", url: "https://twitter.com/PoolTogether_", icon: "/images/x.png" },
+    { name: "Twitter", url: "https://twitter.com/PoolTogether_", icon: "/images/twitter.png" },
     { name: "Discord", url: "https://pooltogether.com/discord", icon: "/images/discord.png" },
     { name: "Farcaster", url: "https://warpcast.com/~/channel/pool-together", icon: "/images/farcaster.png" },
   ];
