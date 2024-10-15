@@ -13,6 +13,7 @@ import Image from 'next/image';
 import { MyConnect} from '../components/ConnectButton';
 import BigWinners from '../components/BigWinners';
 import MainPage from '../components/MainPage';
+import PoweredBy from '../components/PoweredBy';
 
 const Home: NextPage = () => {
   return (
@@ -40,10 +41,11 @@ const Home: NextPage = () => {
         </div>
       
         <MainPage />
-        <Tvl />
+        {/* <Tvl /> */}
         {/*
         <PrizesWon />
         <Chance /> */}
+        <PoweredBy />
         <BigWinners />
       </main>
     </div>

@@ -96,7 +96,8 @@ const PrizesWon: React.FC = () => {
           )}
         </div>
       ) : (
-        <p>No prizes found for this user.</p>
+        // <p>No prizes found for this user.</p>
+        null
       )}
     </div>
   );
