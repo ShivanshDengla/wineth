@@ -38,7 +38,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
  
   
   useEffect(() => {
-    console.log("use effect triggered");
+    // console.log("use effect triggered");
     if (address) {
       getUserData();
     }
@@ -46,9 +46,9 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose }) => {
 
   const getUserData = async () => {
     try {
-      console.log("getUserData triggered",address);
+      // console.log("getUserData triggered",address);
       const data = await getUser(address as string);
-      console.log("user data", data);
+      // console.log("user data", data);
       setUserBalances(data);
     } catch (err) {
       setError('Failed to fetch user data.');

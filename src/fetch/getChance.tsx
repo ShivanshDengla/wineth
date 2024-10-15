@@ -91,8 +91,8 @@ export const GetChance = async (pooler: Address): Promise<ChanceResult | null> =
     const firstTierStartDraw =
       Math.max(0, Number(lastDrawId) - Number(firstTierDuration)) + 1;
 
-    console.log("grandPrizeStartDraw:", grandPrizeStartDraw);
-    console.log("firstTierStartDraw:", firstTierStartDraw);
+    // console.log("grandPrizeStartDraw:", grandPrizeStartDraw);
+    // console.log("firstTierStartDraw:", firstTierStartDraw);
 
     // Second multicall for user balance and vault portions
     const [

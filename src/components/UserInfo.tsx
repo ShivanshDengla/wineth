@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import { useAccount } from "wagmi";
 import { ADDRESS } from "../constants/address";
 import DepositModal from "./DepositModal";
 import WithdrawModal from "./WithdrawModal";
-// import RewardsClaim from "./RewardsClaim.tsx.WIP";
 import { RewardsData } from "../fetch/getRewards";
+import RewardsClaim from "./RewardsClaim"
 import {
   ParseDepositTokenAmount,
   ParseVaultAmount,
@@ -13,6 +12,7 @@ import { ChanceResult } from "../fetch/getChance";
 import {REWARDS} from "../constants/rewards";
 import Image from "next/image";
 import { formatUnits } from "viem";
+import { useAccount } from "wagmi";
 interface UserData {
   UserDepositTokens: bigint;
   UserAllowance: bigint;
@@ -61,7 +61,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [ref, touchesEdges] = useElementTouchesEdges();
 
-  console.log("user chance",userChance?.grandPrize.vaultPortion)
+  // console.log("user chance",userChance?.grandPrize.vaultPortion)
   if (!address) return (
     <div className="flex flex-col items-center justify-center py-8 px-6 mt-6 mb-20 text-white text-lg w-full md:w-auto bg-[#28447A] border-l-4 border-r-4 md:border-l-[#C0ECFF] md:border-r-[#C0ECFF] border-l-transparent border-r-transparent rounded-lg shadow-md overflow-auto">
 
@@ -80,7 +80,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
 
   const hasDepositTokens = userData.UserDepositTokens > BigInt(0);
   const hasVaultTokens = userData.UserVaultTokens > BigInt(0);
-
+console.log("rewards",rewardsData)
   return (
     <div 
       ref={ref}
@@ -165,12 +165,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
                 </span>
                 <span>rewards to claim</span>
               </p>
-              <button
-                onClick={() => {/* Add claim function here */}}
-                className="text-[16px] py-[2px] px-[12px] rounded-[14px] border-none bg-[#2A2A5B] text-[#FFFCFC] cursor-pointer hover:bg-[#27aee3] transition-all"
-              >
-                Claim
-              </button>
+             <RewardsClaim data={rewardsData}/>
             </div>
           )}
 
