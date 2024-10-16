@@ -15,7 +15,7 @@ const PoweredBy: React.FC = () => {
   ];
 
   return (
-    <div className="flex-grow flex flex-col justify-end w-full px-0 py-0 mb-8 md:absolute md:bottom-0 md:left-0 md:right-0 md:px-8">
+    <div className="flex-grow flex flex-col justify-end w-full px-0 py-0 mb-12 md:absolute md:bottom-0 md:left-0 md:right-0 md:px-8 md:mb-8">
       <div className="flex flex-col md:flex-row justify-between items-center">
         {/* Powered By (Sponsors) */}
         <div className="flex space-x-8 mb-2 md:mb-2">
