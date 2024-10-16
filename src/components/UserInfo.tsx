@@ -80,7 +80,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
 
   const hasDepositTokens = userData.UserDepositTokens > BigInt(0);
   const hasVaultTokens = userData.UserVaultTokens > BigInt(0);
-console.log("rewards",rewardsData)
+// console.log("rewards",rewardsData)
   return (
     <div 
       ref={ref}

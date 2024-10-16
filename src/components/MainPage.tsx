@@ -66,7 +66,7 @@ if (rewardsResult !== null) {
 
 // Set prizes if the result is not null
 if (prizesResult !== null) {
-  console.log("setting prizes")
+  // console.log("setting prizes")
   setPrizes(prizesResult);
 }
     }catch(e){console.log(e)}}
