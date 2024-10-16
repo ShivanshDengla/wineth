@@ -1,20 +1,21 @@
 import React from "react";
+import { size } from "viem";
 
 const PoweredBy: React.FC = () => {
   const socialLinks = [
-    { name: "Twitter", url: "https://twitter.com/PoolTogether_", icon: "/images/twitter.png" },
+    { name: "Twitter", url: "https://twitter.com/PoolTogether_", icon: "/images/twitter.png", size: "8" },
     { name: "Discord", url: "https://pooltogether.com/discord", icon: "/images/discord.png" },
     { name: "Farcaster", url: "https://warpcast.com/~/channel/pool-together", icon: "/images/farcaster.png" },
   ];
 
   const poweredBy = [
     { name: "PoolTogether", image: "/images/pooltogether.png" },
-    { name: "AAVE", image: "/images/aave.svg" },
-    { name: "Optimism", image: "/images/optimism.svg" },
+    { name: "AAVE", image: "/images/aave.svg", },
+    { name: "Optimism", image: "/images/optimism.svg", size: "150%" },
   ];
 
   return (
-    <div className="flex-grow flex flex-col justify-end w-full px-0 py-0 mb-12 md:absolute md:bottom-0 md:left-0 md:right-0 md:px-8">
+    <div className="flex-grow flex flex-col justify-end w-full px-0 py-0 mb-8 md:absolute md:bottom-0 md:left-0 md:right-0 md:px-8">
       <div className="flex flex-col md:flex-row justify-between items-center">
         {/* Powered By (Sponsors) */}
         <div className="flex space-x-8 mb-2 md:mb-2">
@@ -23,7 +24,7 @@ const PoweredBy: React.FC = () => {
               key={index}
               src={sponsor.image}
               alt={sponsor.name}
-              className="w-16 h-16"
+              className={`w-${sponsor.size || '16'} h-${sponsor.size || '16'}`}
             />
           ))}
         </div>
@@ -38,7 +39,9 @@ const PoweredBy: React.FC = () => {
               rel="noopener noreferrer"
               className="text-white"
             >
-              <img src={link.icon} alt={link.name} className="w-8 h-8" />
+              <img src={link.icon} alt={link.name} 
+              className={`w-${link.size || '8'} h-${link.size || '8'}`}
+              />
             </a>
           ))}
         </div>
