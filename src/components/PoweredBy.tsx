@@ -9,9 +9,9 @@ const PoweredBy: React.FC = () => {
   ];
 
   const poweredBy = [
-    { name: "PoolTogether", image: "/images/pooltogether.png" },
-    { name: "AAVE", image: "/images/aave.svg", },
-    { name: "Optimism", image: "/images/optimism.svg", size: "150%" },
+    { name: "PoolTogether", image: "/images/pooltogether.png", size: "32" },
+    { name: "AAVE", image: "/images/aave.svg", size: "32" },
+    { name: "Optimism", image: "/images/optimism.svg", size: "32" },
   ];
 
   return (
@@ -24,7 +24,7 @@ const PoweredBy: React.FC = () => {
               key={index}
               src={sponsor.image}
               alt={sponsor.name}
-              className={`w-${sponsor.size || '16'} h-${sponsor.size || '16'}`}
+              className="w-16 h-16"
             />
           ))}
         </div>
