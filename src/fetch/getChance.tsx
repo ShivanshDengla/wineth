@@ -44,7 +44,7 @@ export const GetChance = async (pooler: Address): Promise<ChanceResult | null> =
   } as const;
 
   try {
-    console.log("Fetching lastDrawId, grandPrizeDuration, firstTierDuration, and numberOfTiers...");
+    // console.log("Fetching lastDrawId, grandPrizeDuration, firstTierDuration, and numberOfTiers...");
 
     // First multicall for fetching lastDrawId, grandPrizeDuration, firstTierDuration, and numberOfTiers
     const [lastDrawIdResult, grandPrizeDurationResult, firstTierDurationResult, numberOfTiersResult] = await PROVIDER.multicall({
@@ -76,14 +76,14 @@ export const GetChance = async (pooler: Address): Promise<ChanceResult | null> =
     const firstTierDuration = BigInt(firstTierDurationResult.result as string);
     const numberOfTiers = BigInt(numberOfTiersResult.result as string);
 
-    console.log("lastDrawId:", lastDrawId);
-    console.log("grandPrizeDuration:", grandPrizeDuration);
-    console.log("firstTierDuration:", firstTierDuration);
-    console.log("numberOfTiers:", numberOfTiers);
+    // console.log("lastDrawId:", lastDrawId);
+    // console.log("grandPrizeDuration:", grandPrizeDuration);
+    // console.log("firstTierDuration:", firstTierDuration);
+    // console.log("numberOfTiers:", numberOfTiers);
 
     // Estimate the number of prizes based on the number of tiers
     const estimatedNumberOfPrizes = estimateNumberOfPrizes(numberOfTiers);
-    console.log("Estimated Number of Prizes:", estimatedNumberOfPrizes);
+    // console.log("Estimated Number of Prizes:", estimatedNumberOfPrizes);
 
     // Now calculate the draw starting points based on lastDrawId and durations
     const grandPrizeStartDraw =
@@ -132,12 +132,12 @@ export const GetChance = async (pooler: Address): Promise<ChanceResult | null> =
     const grandPrizeVaultPortion = BigInt(grandPrizeVaultPortionResult.result as string);
     const firstTierVaultPortion = BigInt(firstTierVaultPortionResult.result as string);
 
-    console.log("userGrandPrizeTwab:", userGrandPrizeTwab);
-    console.log("grandPrizeTotalTwab:", grandPrizeTotalTwab);
-    console.log("userFirstTierTwab:", userFirstTierTwab);
-    console.log("firstTierTotalTwab:", firstTierTotalTwab);
-    console.log("grandPrizeVaultPortion:", grandPrizeVaultPortion);
-    console.log("firstTierVaultPortion:", firstTierVaultPortion);
+    // console.log("userGrandPrizeTwab:", userGrandPrizeTwab);
+    // console.log("grandPrizeTotalTwab:", grandPrizeTotalTwab);
+    // console.log("userFirstTierTwab:", userFirstTierTwab);
+    // console.log("firstTierTotalTwab:", firstTierTotalTwab);
+    // console.log("grandPrizeVaultPortion:", grandPrizeVaultPortion);
+    // console.log("firstTierVaultPortion:", firstTierVaultPortion);
 
     // Return the calculated chance as bigints along with the estimated number of prizes
     return {

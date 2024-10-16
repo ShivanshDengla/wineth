@@ -3,7 +3,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
-import Tvl from '../components/Tvl';
+// import Tvl from '../components/Tvl';
 import Prizes from '../components/Prizes';
 import UserBalancesAndChance from '../components/UserInfo';
 import Rewards from '../components/Rewards';
