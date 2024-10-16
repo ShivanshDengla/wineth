@@ -67,7 +67,7 @@ export const ADDRESS: AddressMap = {
       ICON: 'https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png?1547042389',
     },    
     TWABREWARDS: '0x90D383dEA4dcE52D3e5D3C93dE75eF36da3Ea9Ea',
-    PRIZEPOOLSUBGRAPH: "https://api.studio.thegraph.com/query/41211/pt-v5-optimism/version/latest",
+    PRIZEPOOLSUBGRAPH: "https://api.studio.thegraph.com/query/63100/pt-v5-optimism/version/latest/",
     BLOCKEXPLORER: "https://optimistic.etherscan.io"
   };
 

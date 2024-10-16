@@ -54,7 +54,7 @@ const BigWinners: React.FC = () => {
       {prizeClaims.map((claim, index) => {
         const timeAgo = formatDistanceToNow(new Date(parseInt(claim.timestamp) * 1000));
         return (
-          <span key={claim.id} className="inline-flex items-center mr-8 text-white whitespace-nowrap text-sm">
+          <span key={claim.id} className="inline-flex items-center mr-8 text-[#c9d1ea] whitespace-nowrap text-sm">
            
               <PrizeTokenIcon size={18} />
          
