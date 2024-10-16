@@ -45,7 +45,7 @@ export const ADDRESS: AddressMap = {
     CHAINNAME: "Optimism",
     CHAINID: 10,
     RPCURL: process.env.NEXT_PUBLIC_GROVE_KEY ? `https://optimism-mainnet.rpc.grove.city/v1/${process.env.NEXT_PUBLIC_GROVE_KEY}` : 
-    `https://optimism-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`,
+    `https://opt-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`,
     PRIZEPOOL: '0xF35fE10ffd0a9672d0095c435fd8767A7fe29B55',
     PRIZETOKEN: {
       ADDRESS: '0x4200000000000000000000000000000000000006',
