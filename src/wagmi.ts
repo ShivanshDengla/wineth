@@ -14,8 +14,8 @@ export const config = getDefaultConfig({
   appName: 'WinWin',
   projectId: WALLET_CONNECT_KEY,
   chains: [
-    // optimism, 
-    base
+    optimism, 
+    // base
   ],
   ssr: true,
 })
