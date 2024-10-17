@@ -110,7 +110,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
               </p>
               <button
                 onClick={() => setIsDepositModalOpen(true)}
-                className="text-[16px] py-[2px] px-[12px] rounded-[14px] border-none bg-[#2A2A5B] text-[#FFFCFC] cursor-pointer hover:bg-[#27aee3] transition-all"
+                className="text-[16px] py-[2px] px-[12px] rounded-[14px] border-none bg-[#2A2A5B] text-[#FFFCFC] cursor-pointer hover:bg-[#27aee3] transition-all ml-4"
               >
                 Deposit
               </button>
@@ -138,7 +138,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
               </p>
               <button
                 onClick={() => setIsWithdrawModalOpen(true)}
-                className="text-[16px] py-[2px] px-[12px] rounded-[14px] border-none bg-[#2A2A5B] text-[#FFFCFC] cursor-pointer hover:bg-[#27aee3] transition-all"
+                className="text-[16px] py-[2px] px-[12px] rounded-[14px] border-none bg-[#2A2A5B] text-[#FFFCFC] cursor-pointer hover:bg-[#27aee3] transition-all ml-4"
               >
                 Withdraw
               </button>
