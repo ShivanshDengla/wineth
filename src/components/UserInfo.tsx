@@ -88,9 +88,10 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
         touchesEdges ? 'border-l-transparent border-r-transparent' : 'border-l-[#C0ECFF] border-r-[#C0ECFF]'
       }`}
     >
-      {!hasDepositTokens && !hasVaultTokens ? (
+      {!hasDepositTokens && !hasVaultTokens ? (<>
         <p>Welcome winner! For a chance to win, you need {ADDRESS.DEPOSITTOKEN.SYMBOL} tokens.</p>
         <p>This winning experience contributes 1/3 of the yield generated to the Protocol Guild.</p>
+      </>
       ) : (
         <>
           {hasDepositTokens && (
