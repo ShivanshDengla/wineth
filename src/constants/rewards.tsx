@@ -1,7 +1,7 @@
 export const REWARDS = [
     {
       GECKO: "optimism",
-      PROMOTION: 24, 
+      PROMOTION: 8, 
       SYMBOL: "OP",
       IMAGE: "https://assets.coingecko.com/coins/images/25244/standard/Optimism.png?1696524385",
       DECIMALS: 1e18,
