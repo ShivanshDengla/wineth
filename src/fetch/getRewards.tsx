@@ -57,8 +57,11 @@ export async function getRewards(address: string | undefined): Promise<{ promoti
         return null;
       }
 
-      const tokensPerSecond = tokensPerEpoch / epochDuration;
-      const tokensPerYear = (tokensPerSecond / Math.pow(10, reward.DECIMALS)) * (365 * 24 * 60 * 60);
+      const decimals = 18; // Assuming DECIMALS is 18 for standard tokens
+      const tokensPerEpochAdjusted = tokensPerEpoch / Math.pow(10, decimals); // Adjust for decimals
+      const tokensPerSecond = tokensPerEpochAdjusted / epochDuration;
+
+      const tokensPerYear = tokensPerSecond * (365 * 24 * 60 * 60);
 
       const adjustedTvl = formatUnits(tvl, ADDRESS.VAULT.DECIMALS);
 
