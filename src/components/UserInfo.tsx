@@ -90,6 +90,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
     >
       {!hasDepositTokens && !hasVaultTokens ? (
         <p>Welcome winner! For a chance to win, you need {ADDRESS.DEPOSITTOKEN.SYMBOL} tokens.</p>
+        <p>This winning experience contributes 1/3 of the yield generated to the Protocol Guild.</p>
       ) : (
         <>
           {hasDepositTokens && (
