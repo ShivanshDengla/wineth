@@ -177,7 +177,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
                 const chancePercentage = Number(userChance.grandPrize.userTwab) / Number(userChance.grandPrize.totalTwab) *( Number(userChance.grandPrize.vaultPortion)/1e18) * 100;
                 const oddsOfWinning = Math.round(100 / chancePercentage);
                 return (
-                  <p className="text-sm">Your odds of winning the GP are 1 in {oddsOfWinning.toLocaleString()}</p>
+                  <p className="text-sm">Your odds of winning the jackpot are 1 in {oddsOfWinning.toLocaleString()}</p>
                 );
               })()}
             </div>
