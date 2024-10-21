@@ -3,6 +3,7 @@ import { size } from "viem";
 
 const PoweredBy: React.FC = () => {
   const socialLinks = [
+    { name: "Docs", url: "https://docs.wineth.org/", icon: "/images/docs.png", size: "8" },
     { name: "Twitter", url: "https://twitter.com/PoolTogether_", icon: "/images/twitter.png", size: "8" },
     { name: "Discord", url: "https://pooltogether.com/discord", icon: "/images/discord.png" },
     { name: "Farcaster", url: "https://warpcast.com/~/channel/pool-together", icon: "/images/farcaster.png" },
