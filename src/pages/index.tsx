@@ -26,7 +26,7 @@ const Home: NextPage = () => {
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content="winEth | PoolTogether Charity Vault" />
         <meta property="og:description" content="Contribute to a good cause while saving and winning with PoolTogether" />
-        <meta property="og:image" content="/images/embed.png" />
+        <meta property="og:image" content="https://wineth.org/images/embed.png" />
         <meta property="og:url" content="https://wineth.org" />
         <meta property="og:type" content="website" />
 
@@ -35,7 +35,7 @@ const Home: NextPage = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="winEth | PoolTogether Charity Vault" />
         <meta name="twitter:description" content="Contribute to a good cause while saving and winning with PoolTogether." />
-        <meta name="twitter:image" content="https://wineth.org" />
+        <meta name="twitter:image" content="https://wineth.org/images/embed.png" />
 
 
       </Head>
