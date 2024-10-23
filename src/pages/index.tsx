@@ -22,6 +22,22 @@ const Home: NextPage = () => {
         <title>winEth | PoolTogether Charity Vault</title>
         <meta content="Contribute to a good cause while saving and winning with PoolTogether" name="description" />
         <link href="/images/favicon.ico" rel="icon" />
+
+        {/* Open Graph Meta Tags */}
+        <meta property="og:title" content="winEth | PoolTogether Charity Vault" />
+        <meta property="og:description" content="Contribute to a good cause while saving and winning with PoolTogether" />
+        <meta property="og:image" content="/images/embed.png" />
+        <meta property="og:url" content="https://wineth.org" />
+        <meta property="og:type" content="website" />
+
+
+        {/* Twitter Card Images */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="winEth | PoolTogether Charity Vault" />
+        <meta name="twitter:description" content="Contribute to a good cause while saving and winning with PoolTogether." />
+        <meta name="twitter:image" content="https://wineth.org" />
+
+
       </Head>
 
       <main className="flex flex-col items-center justify-center h-full">
