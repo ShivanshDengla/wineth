@@ -68,7 +68,14 @@ export async function getRewards(address: string | undefined): Promise<{ promoti
       const aprValue = (tokensPerYear * tokenPrice) / parseFloat(adjustedTvl);
 
       const completedEpochs = getCompletedEpochs(startTimestamp, epochDuration, numberOfEpochs, currentTimestamp);
-
+console.log(PROMOTION,
+        SYMBOL,
+        startTimestamp,
+        promoEnd,
+        completedEpochs,
+        tokensPerYear,
+        tokenPrice,
+        adjustedTvl, aprValue)
       return {
         PROMOTION,
         SYMBOL,
