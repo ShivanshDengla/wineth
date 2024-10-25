@@ -193,16 +193,23 @@ function sumBigInts(bigints: bigint[]): bigint {
 }
 
 function formatBigIntWithDecimals(value: bigint, decimals: number): string {
+  console.log("value", value.toString(), "decimals", decimals);
+  if (decimals === 1e18) {
+    console.warn("Correcting unexpected decimals value from 1e18 to 18");
+    decimals = 18;
+  }
+  // Check for valid decimal range
+  if (decimals < 0 || decimals > 100) {
+    console.warn("Unexpected decimals value:", decimals);
+    decimals = Math.min(Math.max(decimals, 0), 100); // clamp to a reasonable range
+  }
+
   const valueString = value.toString().padStart(decimals + 1, '0');
   const integerPart = valueString.slice(0, -decimals);
   const fractionalPart = valueString.slice(-decimals);
   const trimmedFractionalPart = fractionalPart.replace(/0+$/, '');
-  
-  if (trimmedFractionalPart) {
-    return `${integerPart}.${trimmedFractionalPart}`;
-  } else {
-    return integerPart;
-  }
+
+  return trimmedFractionalPart ? `${integerPart}.${trimmedFractionalPart}` : integerPart;
 }
 
 export default UserInfo;
