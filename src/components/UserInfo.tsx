@@ -151,7 +151,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
             </div>
           )}
           
-          {rewardsData && rewardsData[0]?.amounts?.length > 0 && (
+          {rewardsData && rewardsData[0]?.amounts?.length > 0 && sumBigInts(rewardsData[0].amounts) > BigInt(0) && (
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full">
               <p className="flex items-center flex-wrap mb-2 sm:mb-0">
                 <span className="mr-2">You have</span>
