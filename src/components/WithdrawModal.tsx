@@ -101,10 +101,10 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
           <>
             <div className="flex flex-col space-y-4">
               {/* Display Current Balances */}
-              <div className="flex items-center justify-between">
-                <p className="flex items-center">
-                  You have 
-                  <span className="mx-2 relative w-6 h-6">
+              <div className="flex flex-col items-center space-y-2">
+                <p className="text-center">You have:</p>
+                <div className="flex items-center max-w-full overflow-hidden">
+                  <span className="relative w-6 h-6 flex-shrink-0">
                     <Image
                       src={ADDRESS.VAULT.ICON}
                       alt={`${ADDRESS.VAULT.SYMBOL} Icon`}
@@ -112,10 +112,10 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
                       objectFit="contain"
                     />
                   </span>
-                  <span className="whitespace-nowrap">
+                  <span className="ml-2 truncate">
                     {formatUnits(userBalances.UserVaultTokens, ADDRESS.VAULT.DECIMALS)} {ADDRESS.VAULT.SYMBOL}
                   </span>
-                </p>
+                </div>
               </div>
 
               {/* Input and Buttons */}
