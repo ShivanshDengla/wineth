@@ -1,14 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { formatUnits } from 'viem';
 import { ADDRESS } from '../constants/address';
-
-interface CharityAmountProps {
-  yieldFeeBalance: bigint;
-}
+import { usePublicClient } from 'wagmi';
 
 const TOTAL_DONATED = 13040; // Constant for already donated amount
 
-const CharityAmount: React.FC<CharityAmountProps> = ({ yieldFeeBalance }) => {
+const CharityAmount: React.FC = () => {
+  const [yieldFeeBalance, setYieldFeeBalance] = useState<bigint>(BigInt(0));
+  const publicClient = usePublicClient();
+
+  useEffect(() => {
+    const fetchYieldFeeBalance = async () => {
+      if (!publicClient) return;
+      
+      try {
+        const yieldFeeBalanceResult = await publicClient.readContract({
+          address: ADDRESS.VAULT.ADDRESS,
+          abi: [{
+            name: 'yieldFeeBalance',
+            type: 'function',
+            stateMutability: 'view',
+            inputs: [],
+            outputs: [{ type: 'uint256' }]
+          }],
+          functionName: 'yieldFeeBalance'
+        });
+        setYieldFeeBalance(yieldFeeBalanceResult);
+      } catch (error) {
+        console.error('Error fetching yield fee balance:', error);
+      }
+    };
+
+    fetchYieldFeeBalance();
+  }, [publicClient]);
+
   const currentBalance = parseFloat(
     formatUnits(yieldFeeBalance, ADDRESS.DEPOSITTOKEN.DECIMALS)
   );

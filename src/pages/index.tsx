@@ -54,7 +54,7 @@ const Home: NextPage = () => {
             />
           </div>
           <div className="hidden md:block">
-            <CharityAmount yieldFeeBalance={BigInt(0)} />
+            <CharityAmount />
           </div>
           <div>
             <MyConnect connectText="CONNECT" />
@@ -64,7 +64,7 @@ const Home: NextPage = () => {
         {/* Main content section */}
         <div className="flex flex-col items-center">
           <div className="md:hidden flex justify-center mb-4">
-            <CharityAmount yieldFeeBalance={BigInt(0)} />
+            <CharityAmount />
           </div>
           <MainPage />
           <PoweredBy />
