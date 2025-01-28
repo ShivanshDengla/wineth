@@ -19,19 +19,19 @@ const PoweredBy: React.FC = () => {
     <div className="flex-grow flex flex-col justify-end w-full px-0 py-0 mb-12 md:fixed md:bottom-0 md:left-0 md:right-0 md:px-8 md:mb-8">
       <div className="flex flex-col md:flex-row justify-between items-center">
         {/* Powered By (Sponsors) */}
-        <div className="flex space-x-8 mb-2 md:mb-2">
+        <div className="flex space-x-6 md:space-x-8 mb-4 md:mb-2">
           {poweredBy.map((sponsor, index) => (
             <img
               key={index}
               src={sponsor.image}
               alt={sponsor.name}
-              className="w-16 h-16"
+              className="w-12 h-12 md:w-16 md:h-16"
             />
           ))}
         </div>
 
         {/* Social Links */}
-        <div className="flex space-x-6">
+        <div className="flex space-x-4 md:space-x-6 mb-4 md:mb-0">
           {socialLinks.map((link, index) => (
             <a
               key={index}
@@ -40,8 +40,10 @@ const PoweredBy: React.FC = () => {
               rel="noopener noreferrer"
               className="text-white"
             >
-              <img src={link.icon} alt={link.name} 
-              className={`w-${link.size || '8'} h-${link.size || '8'}`}
+              <img 
+                src={link.icon} 
+                alt={link.name} 
+                className={`w-6 h-6 md:w-${link.size || '8'} md:h-${link.size || '8'}`}
               />
             </a>
           ))}

@@ -14,6 +14,7 @@ import { MyConnect} from '../components/ConnectButton';
 import BigWinners from '../components/BigWinners';
 import MainPage from '../components/MainPage';
 import PoweredBy from '../components/PoweredBy';
+import CharityAmount from '../components/CharityAmount';
 
 const Home: NextPage = () => {
   return (
@@ -40,29 +41,35 @@ const Home: NextPage = () => {
 
       </Head>
 
-      <main className="flex flex-col items-center justify-center h-full">
-        <div className="w-full flex justify-between items-center p-2">
+      <main className="flex flex-col min-h-screen pt-2">
+        {/* Header section */}
+        <div className="w-full flex justify-between items-center p-2 mb-8">
           <div>
             <Image
               src="/images/wineth.png"
-              height={0} // Keep height for aspect ratio
-              width={125} // Set width to 0 to allow auto-adjust
+              height={0}
+              width={125}
               alt="WinEth Logo"
-              className="h-auto sm:w-[150px]" // Adjust class for height
+              className="h-auto sm:w-[150px]"
             />
+          </div>
+          <div className="hidden md:block">
+            <CharityAmount yieldFeeBalance={BigInt(0)} />
           </div>
           <div>
             <MyConnect connectText="CONNECT" />
           </div>
         </div>
       
-        <MainPage />
-        {/* <Tvl /> */}
-        {/*
-        <PrizesWon />
-        <Chance /> */}
-        <PoweredBy />
-        <BigWinners />
+        {/* Main content section */}
+        <div className="flex flex-col items-center">
+          <div className="md:hidden flex justify-center mb-4">
+            <CharityAmount yieldFeeBalance={BigInt(0)} />
+          </div>
+          <MainPage />
+          <PoweredBy />
+          <BigWinners />
+        </div>
       </main>
     </div>
   );

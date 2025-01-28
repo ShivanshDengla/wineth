@@ -8,6 +8,9 @@ import RewardsApr from './RewardsApr';
 import UserInfo from './UserInfo';
 import { GetChance, ChanceResult } from "../fetch/getChance";
 import PrizesWon from './PrizesWon';
+import { createPublicClient, http } from 'viem';
+import { optimism } from 'viem/chains';
+import { ADDRESS } from '../constants/address';
 
 const MainPage: React.FC = () => {
   const { address } = useAccount();
@@ -19,6 +22,7 @@ const MainPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [userChance, setUserChance] = useState<ChanceResult | null>(null);
+  const [yieldFeeBalance, setYieldFeeBalance] = useState<bigint>(BigInt(0));
 
   const fetchAllData = async () => {
     // if (!address) return;
@@ -69,6 +73,26 @@ if (prizesResult !== null) {
   // console.log("setting prizes")
   setPrizes(prizesResult);
 }
+
+      // Add yield fee balance fetch
+      const publicClient = createPublicClient({
+        chain: optimism,
+        transport: http()
+      });
+
+      const yieldFeeBalanceResult = await publicClient.readContract({
+        address: ADDRESS.VAULT.ADDRESS,
+        abi: [{
+          name: 'yieldFeeBalance',
+          type: 'function',
+          stateMutability: 'view',
+          inputs: [],
+          outputs: [{ type: 'uint256' }]
+        }],
+        functionName: 'yieldFeeBalance'
+      });
+
+      setYieldFeeBalance(yieldFeeBalanceResult);
     }catch(e){console.log(e)}}
   const updateUserBalancesAndChance = async () => {
     if (!address) return;
@@ -94,8 +118,8 @@ if (prizesResult !== null) {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
-      <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-14 w-full md:w-auto mt-8 md:mt-16">
+    <div className="min-h-screen md:pt-[15vh]">
+      <div className="flex flex-col md:flex-row justify-center items-center gap-2 md:gap-14 w-full md:w-auto px-2 md:px-0">
         <Prizes prizes={prizes} />
         <RewardsApr promotionData={promotionData} />
         <PrizesWon/>

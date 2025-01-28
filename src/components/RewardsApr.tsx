@@ -85,28 +85,24 @@ const RewardsApr: React.FC<RewardsAprProps> = ({ promotionData }) => {
     <>
       {promotionData.length > 0 && promotionData.map((promo, index) => {
         const rewardInfo = REWARDS.find(reward => reward.PROMOTION === promo.PROMOTION);
-
+        
         return (
-          <div className="flex items-center justify-center bg-[#28447A] border-2 border-[#C0ECFF] rounded-lg p-4 text-white text-lg sm:text-base md:text-lg w-[340px] h-[60px]">
-            {promotionData.length > 0 && promotionData.map((promo, index) => {
-              const rewardInfo = REWARDS.find(reward => reward.PROMOTION === promo.PROMOTION);
-      
-              return (
-                <div key={index} className="flex items-center gap-2">
-                  <p>+{formatNumber(promo.aprValue ? promo.aprValue * 100 : undefined)}%</p>
-      
-                  {rewardInfo?.IMAGE && (
-                    <Image
-                      src={rewardInfo.IMAGE}
-                      alt={`${rewardInfo.SYMBOL} Logo`}
-                      width={20}
-                      height={20}
-                    />
-                  )}
-                  <p>Rewards</p>
-                </div>
-              );
-            })}
+          <div key={index} className="flex items-center justify-center gap-2 bg-[#28447A] border-2 border-[#C0ECFF] rounded-lg p-3 md:p-4 text-white text-base md:text-lg w-[280px] md:w-[340px] h-[50px] md:h-[60px] mx-auto">
+            <div className="flex items-center gap-1 md:gap-2">
+              <p className="text-sm md:text-base">
+                +{formatNumber(promo.aprValue ? promo.aprValue * 100 : undefined)}%
+              </p>
+
+              {rewardInfo?.IMAGE && (
+                <Image
+                  src={rewardInfo.IMAGE}
+                  alt={`${rewardInfo.SYMBOL} Logo`}
+                  width={20}
+                  height={20}
+                />
+              )}
+              <p className="text-sm md:text-base">Rewards</p>
+            </div>
           </div>
         );
       })}

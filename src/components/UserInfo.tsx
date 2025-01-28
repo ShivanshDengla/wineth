@@ -84,38 +84,61 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
   return (
     <div 
       ref={ref}
-      className={`flex flex-col items-start py-4 px-6 mt-6 mb-20 text-white text-lg w-full md:w-auto bg-[#28447A] border-l-4 border-r-4 space-y-6 sm:space-y-2 ${
+      className={`flex flex-col items-start py-2 md:py-4 px-3 md:px-6 mt-4 md:mt-6 mb-16 md:mb-20 text-white text-base md:text-lg w-[90%] md:w-auto mx-auto bg-[#28447A] border-l-4 border-r-4 space-y-4 sm:space-y-2 ${
         touchesEdges ? 'border-l-transparent border-r-transparent' : 'border-l-[#C0ECFF] border-r-[#C0ECFF]'
       }`}
     >
       {!hasDepositTokens && !hasVaultTokens ? (<>
-        <p>Welcome winner! For a chance to win, you need {ADDRESS.DEPOSITTOKEN.SYMBOL} tokens.</p>
-        <p>This winning experience contributes 1/3 of the yield generated to the Protocol Guild.</p>
+        <p className="text-sm md:text-base">Welcome winner! For a chance to win, you need {ADDRESS.DEPOSITTOKEN.SYMBOL} tokens.</p>
+        <p className="text-sm md:text-base">This winning experience contributes 1/3 of the yield generated to the Protocol Guild.</p>
       </>
       ) : (
         <>
           {hasDepositTokens && (
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full">
-              <p className="flex items-center flex-wrap mb-2 sm:mb-0">
-                <span className="mr-2">You have</span>
-                <Image
-                  src={ADDRESS.DEPOSITTOKEN.ICON}
-                  alt={`${ADDRESS.DEPOSITTOKEN.SYMBOL} Icon`}
-                  width={20}
-                  height={20}
-                  className="inline-block mr-1"
-                />
-                <span className="mr-2">
-                  {ParseDepositTokenAmount(userData?.UserDepositTokens, true)} {ADDRESS.DEPOSITTOKEN.SYMBOL}
-                </span>
-                <span>you can deposit</span>
-              </p>
-              <button
-                onClick={() => setIsDepositModalOpen(true)}
-                className="text-[16px] py-[2px] px-[12px] rounded-[14px] border-none bg-[#2A2A5B] text-[#FFFCFC] cursor-pointer hover:bg-[#27aee3] transition-all ml-4"
-              >
-                Deposit
-              </button>
+              <div className="flex justify-between items-center w-full sm:w-auto mb-2 sm:mb-0 text-sm md:text-base">
+                <div className="flex items-center sm:hidden">
+                  <Image
+                    src={ADDRESS.DEPOSITTOKEN.ICON}
+                    alt={`${ADDRESS.DEPOSITTOKEN.SYMBOL} Icon`}
+                    width={20}
+                    height={20}
+                    className="mr-1"
+                  />
+                  <span>{ParseDepositTokenAmount(userData?.UserDepositTokens, true)}</span>
+                  <span className="ml-1">{ADDRESS.DEPOSITTOKEN.SYMBOL}</span>
+                </div>
+                <p className="hidden sm:flex sm:items-center">
+                  <span className="mr-2">You have</span>
+                  <Image
+                    src={ADDRESS.DEPOSITTOKEN.ICON}
+                    alt={`${ADDRESS.DEPOSITTOKEN.SYMBOL} Icon`}
+                    width={20}
+                    height={20}
+                    className="inline-block mr-1"
+                  />
+                  <span className="mr-2">
+                    {ParseDepositTokenAmount(userData?.UserDepositTokens, true)} {ADDRESS.DEPOSITTOKEN.SYMBOL}
+                  </span>
+                  <span>you can deposit</span>
+                </p>
+                <div className="sm:hidden">
+                  <button
+                    onClick={() => setIsDepositModalOpen(true)}
+                    className="text-sm md:text-base py-[2px] px-[8px] md:px-[12px] rounded-[14px] border-none bg-[#2A2A5B] text-[#FFFCFC] cursor-pointer hover:bg-[#27aee3] transition-all"
+                  >
+                    Deposit
+                  </button>
+                </div>
+              </div>
+              <div className="hidden sm:block">
+                <button
+                  onClick={() => setIsDepositModalOpen(true)}
+                  className="text-sm md:text-base py-[2px] px-[8px] md:px-[12px] rounded-[14px] border-none bg-[#2A2A5B] text-[#FFFCFC] cursor-pointer hover:bg-[#27aee3] transition-all sm:ml-4"
+                >
+                  Deposit
+                </button>
+              </div>
               <DepositModal
                 isOpen={isDepositModalOpen}
                 onClose={() => {setIsDepositModalOpen(false); onDataUpdate();}}
@@ -124,26 +147,49 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
           )}
           {hasVaultTokens && (
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full">
-              <p className="flex items-center flex-wrap mb-2 sm:mb-0">
-                <span className="mr-2">You have</span>
-                <Image
-                  src={ADDRESS.VAULT.ICON}
-                  alt={`${ADDRESS.VAULT.SYMBOL} Icon`}
-                  width={20}
-                  height={20}
-                  className="inline-block mr-1"
-                />
-                <span className="mr-2">
-                  {ParseVaultAmount(userData?.UserVaultTokens, true)} {ADDRESS.VAULT.SYMBOL}
-                </span>
-                <span>tickets to win</span>
-              </p>
-              <button
-                onClick={() => setIsWithdrawModalOpen(true)}
-                className="text-[16px] py-[2px] px-[12px] rounded-[14px] border-none bg-[#2A2A5B] text-[#FFFCFC] cursor-pointer hover:bg-[#27aee3] transition-all ml-4"
-              >
-                Withdraw
-              </button>
+              <div className="flex justify-between items-center w-full sm:w-auto mb-2 sm:mb-0 text-sm md:text-base">
+                <div className="flex items-center sm:hidden">
+                  <Image
+                    src={ADDRESS.VAULT.ICON}
+                    alt={`${ADDRESS.VAULT.SYMBOL} Icon`}
+                    width={20}
+                    height={20}
+                    className="mr-1"
+                  />
+                  <span>{ParseVaultAmount(userData?.UserVaultTokens, true)}</span>
+                  <span className="ml-1">{ADDRESS.VAULT.SYMBOL}</span>
+                </div>
+                <p className="hidden sm:flex sm:items-center">
+                  <span className="mr-2">You have</span>
+                  <Image
+                    src={ADDRESS.VAULT.ICON}
+                    alt={`${ADDRESS.VAULT.SYMBOL} Icon`}
+                    width={20}
+                    height={20}
+                    className="inline-block mr-1"
+                  />
+                  <span className="mr-2">
+                    {ParseVaultAmount(userData?.UserVaultTokens, true)} {ADDRESS.VAULT.SYMBOL}
+                  </span>
+                  <span>tickets to win</span>
+                </p>
+                <div className="sm:hidden">
+                  <button
+                    onClick={() => setIsWithdrawModalOpen(true)}
+                    className="text-sm md:text-base py-[2px] px-[8px] md:px-[12px] rounded-[14px] border-none bg-[#2A2A5B] text-[#FFFCFC] cursor-pointer hover:bg-[#27aee3] transition-all"
+                  >
+                    Withdraw
+                  </button>
+                </div>
+              </div>
+              <div className="hidden sm:block">
+                <button
+                  onClick={() => setIsWithdrawModalOpen(true)}
+                  className="text-sm md:text-base py-[2px] px-[8px] md:px-[12px] rounded-[14px] border-none bg-[#2A2A5B] text-[#FFFCFC] cursor-pointer hover:bg-[#27aee3] transition-all sm:ml-4"
+                >
+                  Withdraw
+                </button>
+              </div>
               <WithdrawModal
                 isOpen={isWithdrawModalOpen}
                 onClose={() => {setIsWithdrawModalOpen(false); onDataUpdate();}}
@@ -153,21 +199,39 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
           
           {rewardsData && rewardsData[0]?.amounts?.length > 0 && sumBigInts(rewardsData[0].amounts) > BigInt(0) && (
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full">
-              <p className="flex items-center flex-wrap mb-2 sm:mb-0">
-                <span className="mr-2">You have</span>
-                <Image 
-                  src={REWARDS[0].IMAGE} 
-                  alt={REWARDS[0].SYMBOL}
-                  width={20} 
-                  height={20}
-                  className="inline-block mr-1"
-                />
-                <span className="mr-2">
-                  {CropDecimals(formatBigIntWithDecimals(sumBigInts(rewardsData[0].amounts), REWARDS[0].DECIMALS))} {REWARDS[0].SYMBOL}
-                </span>
-                <span>rewards to claim</span>
-              </p>
-             <RewardsClaim data={rewardsData}/>
+              <div className="flex justify-between items-center w-full sm:w-auto mb-2 sm:mb-0 text-sm md:text-base">
+                <div className="flex items-center sm:hidden">
+                  <Image 
+                    src={REWARDS[0].IMAGE} 
+                    alt={REWARDS[0].SYMBOL}
+                    width={20} 
+                    height={20}
+                    className="mr-1"
+                  />
+                  <span>{CropDecimals(formatBigIntWithDecimals(sumBigInts(rewardsData[0].amounts), REWARDS[0].DECIMALS))}</span>
+                  <span className="ml-1">claimable</span>
+                </div>
+                <p className="hidden sm:flex sm:items-center">
+                  <span className="mr-2">You have</span>
+                  <Image 
+                    src={REWARDS[0].IMAGE} 
+                    alt={REWARDS[0].SYMBOL}
+                    width={20} 
+                    height={20}
+                    className="inline-block mr-1"
+                  />
+                  <span className="mr-2">
+                    {CropDecimals(formatBigIntWithDecimals(sumBigInts(rewardsData[0].amounts), REWARDS[0].DECIMALS))} {REWARDS[0].SYMBOL}
+                  </span>
+                  <span>rewards to claim</span>
+                </p>
+                <div className="sm:hidden">
+                  <RewardsClaim data={rewardsData}/>
+                </div>
+              </div>
+              <div className="hidden sm:block">
+                <RewardsClaim data={rewardsData}/>
+              </div>
             </div>
           )}
 
@@ -177,7 +241,7 @@ const UserInfo: React.FC<UserBalancesAndChanceProps> = ({
                 const chancePercentage = Number(userChance.grandPrize.userTwab) / Number(userChance.grandPrize.totalTwab) *( Number(userChance.grandPrize.vaultPortion)/1e18) * 100;
                 const oddsOfWinning = Math.round(100 / chancePercentage);
                 return (
-                  <p className="text-sm">Your odds of winning the jackpot are 1 in {oddsOfWinning.toLocaleString()}</p>
+                  <p className="text-xs md:text-sm text-[#C0ECFF]">Your odds of winning the jackpot are 1 in {oddsOfWinning.toLocaleString()}</p>
                 );
               })()}
             </div>

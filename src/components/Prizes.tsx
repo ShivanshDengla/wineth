@@ -35,9 +35,9 @@ const Prizes: React.FC<PrizesProps> = ({ prizes }) => {
 
 
   return (
-    <div className="flex items-center justify-center gap-2 bg-[#28447A] border-2 border-[#C0ECFF] rounded-lg p-4 text-white text-lg sm:text-base md:text-lg w-[340px] h-[60px]">
-      <PrizeTokenIcon size={24} />
-      <p className="whitespace-nowrap overflow-hidden text-ellipsis text-center">
+    <div className="flex items-center justify-center gap-2 bg-[#28447A] border-2 border-[#C0ECFF] rounded-lg p-3 md:p-4 text-white text-base md:text-lg w-[280px] md:w-[340px] h-[50px] md:h-[60px] mx-auto">
+      <PrizeTokenIcon size={20} />
+      <p className="whitespace-nowrap overflow-hidden text-ellipsis text-center text-sm md:text-base">
         {ParsePrizeAmount(displayAmount ?? BigInt(0))} {ADDRESS.PRIZETOKEN.SYMBOL} {displayText}
       </p>
     </div>

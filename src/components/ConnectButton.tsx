@@ -75,32 +75,38 @@ export const MyConnect: React.FC<ConnectProps> = ({ connectText }) => {
                     <button
                       onClick={openChainModal}
                       style={{ display: "flex", ...styles.button }}
-                      type="button">
+                      type="button"
+                      className="hidden md:flex">
                       {chain.hasIcon && (
                         <div
                           style={{
                             background: chain.iconBackground,
-                            width: 14,
-                            height: 14,
+                            width: 20,
+                            height: 20,
                             borderRadius: 999,
                             overflow: "hidden",
-                            marginRight: 4,
-                          }}>
+                            marginRight: 0,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                          className="md:w-[14px] md:h-[14px] md:pl-0 md:mr-1">
                           {chain.iconUrl && (
                             <img
                               alt={chain.name ?? "Chain icon"}
                               src={chain.iconUrl}
-                              style={{ width: 14, height: 14 }}
+                              style={{ width: "100%", height: "100%" }}
                             />
                           )}
                         </div>
                       )}
-                      {chain.name}
+                      <span className="hidden md:inline ml-1">{chain.name}</span>
                     </button>
                     <button
                       onClick={openAccountModal}
                       type="button"
-                      style={styles.button}>
+                      style={styles.button}
+                      className="text-sm md:text-base">
                       {account.displayName}
                       {/* {account.displayBalance
                       ? ` (${account.displayBalance})`
