@@ -3,19 +3,21 @@ import { optimism, base } from 'wagmi/chains';
 import { createPublicClient, http } from 'viem';
 import { ADDRESS } from './constants/address'
 
+if (!process.env.NEXT_PUBLIC_WALLET_CONNECT) {
+  throw new Error('Missing NEXT_PUBLIC_WALLET_CONNECT environment variable')
+}
+
 export const PROVIDER = createPublicClient({
   chain: base,
   transport: http(ADDRESS.RPCURL),
 });
 
-const WALLET_CONNECT_KEY = process.env.WALLET_CONNECT || "default_project_id";
-
 export const config = getDefaultConfig({
   appName: 'WinWin',
-  projectId: WALLET_CONNECT_KEY,
+  projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT,
   chains: [
-    optimism, 
+    optimism,
     // base
   ],
-  ssr: true,
+  ssr: true, // Since you're using Next.js
 })

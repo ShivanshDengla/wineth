@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { formatUnits } from 'viem';
 import { ADDRESS } from '../constants/address';
 import { usePublicClient } from 'wagmi';
+import CountUp from 'react-countup';
 
-const TOTAL_DONATED = 13040; // Constant for already donated amount
+const TOTAL_DONATED = 13040+13710; // Constant for already donated amount
 
 const CharityAmount: React.FC = () => {
   const [yieldFeeBalance, setYieldFeeBalance] = useState<bigint>(BigInt(0));
@@ -38,16 +39,21 @@ const CharityAmount: React.FC = () => {
     formatUnits(yieldFeeBalance, ADDRESS.DEPOSITTOKEN.DECIMALS)
   );
   
-  const totalAmount = (currentBalance + TOTAL_DONATED).toLocaleString('en-US', {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  });
+  const totalAmount = currentBalance + TOTAL_DONATED;
 
   return (
-    <div className="flex items-center justify-center bg-[#28447A] border-2 border-[#C0ECFF] rounded-lg p-2 md:p-2 text-white w-[280px] md:h-[50px] md:h-[70px] mx-auto">
+    <div className="flex items-center justify-center bg-[#28447A] border-2 border-[#C0ECFF] w-[280px] mx-auto md:border-0 md:w-auto md:mx-0 md:bg-[#2A2A5B] rounded-lg p-2 text-white text-sm">
       <div className="flex items-center gap-2">
-        <p className="text-sm md:text-base font-bold text-[#C0ECFF]">${totalAmount}</p>
-        <p className="text-sm md:text-base text-gray-200">Donated</p>
+        <p className="font-bold text-[#C0ECFF]">
+          $<CountUp
+            end={totalAmount}
+            duration={2.5}
+            separator=","
+            decimal="."
+            decimals={0}
+          />
+        </p>
+        <p className="text-gray-200">Donated</p>
       </div>
     </div>
   );
