@@ -38,6 +38,12 @@ const Home: NextPage = () => {
         <meta name="twitter:description" content="Contribute to a good cause while saving and winning with PoolTogether." />
         <meta name="twitter:image" content="https://wineth.org/images/embed.png" />
 
+        {/* Farcaster Frame Meta Tags */}
+        <meta property="fc:frame" content="vNext" />
+        <meta property="fc:frame:image" content="https://wineth.org/images/embed.png" />
+        <meta property="fc:frame:button:1" content="Open App" />
+        <meta property="fc:frame:button:1:action" content="post_redirect" />
+        <meta property="fc:frame:post_url" content="https://wineth.org/frame" />
 
       </Head>
 
