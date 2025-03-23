@@ -2,14 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['assets.coingecko.com'], // Add the external domain here
+    domains: ['assets.coingecko.com'], // Keep your existing domains
   },
   async headers() {
-    // Check if we're in a preview deployment
-    const isPreview = process.env.VERCEL_ENV === 'preview';
-    
     return [
       {
+        // Apply these headers to all routes
         source: '/(.*)',
         headers: [
           {
@@ -28,12 +26,10 @@ const nextConfig = {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin'
           },
-          // For preview deployments, explicitly allow embedding
           {
+            // Remove X-Frame-Options completely and rely on CSP
             key: 'Content-Security-Policy',
-            value: isPreview 
-              ? "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https:; frame-ancestors *;"
-              : "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https:; frame-ancestors 'self' https://*.warpcast.com https://*.farcaster.xyz;"
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https:; frame-ancestors *;"
           }
         ]
       }
