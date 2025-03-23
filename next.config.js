@@ -4,6 +4,19 @@ const nextConfig = {
   images: {
     domains: ['assets.coingecko.com'], // Add the external domain here
   },
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'ALLOWALL', // This allows your site to be embedded in iframes
+          },
+        ],
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
