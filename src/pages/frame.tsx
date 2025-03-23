@@ -3,11 +3,7 @@
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
-// Dynamically import components that use the Frame SDK
-const FramesProvider = dynamic(() => import('../components/providers/FramesProvider'), {
-  ssr: false,
-});
-
+// Dynamically import Frame component
 const Frame = dynamic(() => import('../components/Frame'), {
   ssr: false,
 });
@@ -22,16 +18,14 @@ export default function FramePage() {
         
         {/* Frame metadata */}
         <meta property="fc:frame" content="vNext" />
-        <meta property="fc:frame:image" content="https://wineth.org/images/embed.png" />
+        <meta property="fc:frame:image" content="https://winwin-git-frames-shivansh-denglas-projects.vercel.app/images/embed.png" />
         <meta property="fc:frame:button:1" content="Visit winEth" />
         <meta property="fc:frame:button:1:action" content="post_redirect" />
-        <meta property="fc:frame:post_url" content="https://wineth.org/frame" />
+        <meta property="fc:frame:post_url" content="https://winwin-git-frames-shivansh-denglas-projects.vercel.app/frame" />
       </Head>
       
-      <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-900">
-        <FramesProvider>
-          <Frame />
-        </FramesProvider>
+      <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-100">
+        <Frame />
       </main>
     </>
   );

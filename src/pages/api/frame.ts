@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
+  // Allow both GET and POST requests
+  if (req.method !== 'POST' && req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
@@ -9,14 +10,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   res.status(200).json({
     frames: {
       version: 'vNext',
-      image: 'https://wineth.org/images/embed.png',
+      image: 'https://winwin-git-frames-shivansh-denglas-projects.vercel.app/images/embed.png',
       buttons: [
         {
           label: 'Open App',
           action: 'post_redirect'
         }
       ],
-      postUrl: 'https://wineth.org/frame'
+      postUrl: 'https://winwin-git-frames-shivansh-denglas-projects.vercel.app/frame'
     }
   });
 } 
