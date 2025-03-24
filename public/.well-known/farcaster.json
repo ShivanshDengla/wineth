@@ -1,0 +1,18 @@
+{
+    "accountAssociation": {
+      "header": "eyJmaWQiOjExNTkxLCJ0eXBlIjoiY3VzdG9keSIsImtleSI6IjB4MDNkYkRmZjQ2YzY0YThBNDA0NUUwNjdGMzBkYjE3ODZlOTVGNzBkMyJ9",
+      "payload": "eyJkb21haW4iOiJ3aW5ldGgub3JnIn0",
+      "signature": "MHg5MzZlZDgzNTUxMDg2MjFkZmJmNmFhODBkY2FiYzkzMWU0ZjVjMDQzMzNiZmUxZmY5ZTE5YzM1ZDJmYmVkMTFmMDQzNjUzODk5MGM2Y2YwYWJhYzE5NWU1MzhlOTM4NzhmNDZjMjAwNzQ4NjFmN2IxMDI1YWZkOGMxOTZmMjk0NzFj"
+    },
+    "frame": {
+      "version": "1",
+      "name": "WinEth",
+      "iconUrl": "https://wineth.org/images/favicon.ico",
+      "homeUrl": "https://wineth.org",
+      "imageUrl": "https://wineth.org/images/embed.png",
+      "buttonTitle": "Launch",
+      "splashImageUrl": "https://wineth.org/images/embed.png",
+      "splashBackgroundColor": "#246ca8",
+      "webhookUrl": "https://wineth.org/"
+    }
+  }

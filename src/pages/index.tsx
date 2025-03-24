@@ -38,6 +38,21 @@ const Home: NextPage = () => {
         <meta name="twitter:description" content="Contribute to a good cause while saving and winning with PoolTogether." />
         <meta name="twitter:image" content="https://wineth.org/images/embed.png" />
 
+        {/* Farcaster Frame Meta Tag */}
+        <meta name="fc:frame" content='{
+          "version": "next",
+          "imageUrl": "https://wineth.org/images/embed.png",
+          "button":{
+            "title": "Launch",
+            "action": {
+              "type": "launch_frame",
+              "name": "WinEth",
+              "url": "https://wineth.org",
+              "splashImageUrl": "https://wineth.org/images/favicon.ico",
+              "splashBackgroundColor": "#246ca8"
+            }
+          }
+        }' data-rh="true" />
 
       </Head>
 
