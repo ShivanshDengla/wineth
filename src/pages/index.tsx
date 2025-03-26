@@ -48,7 +48,7 @@ const Home: NextPage = () => {
               "type": "launch_frame",
               "name": "WinEth",
               "url": "https://wineth.org",
-              "splashImageUrl": "https://wineth.org/images/favicon.ico",
+              "splashImageUrl": "https://wineth.org/images/trophy.png",
               "splashBackgroundColor": "#246ca8"
             }
           }
